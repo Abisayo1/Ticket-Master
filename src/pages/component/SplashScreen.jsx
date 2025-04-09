@@ -1,0 +1,13 @@
+// SplashScreen.js
+import React from 'react';
+
+export default function SplashScreen() {
+  return (
+    <div className="flex items-center justify-center h-screen bg-blue-600 text-white">
+      <div className="text-4xl font-bold flex items-center">
+        <span>Ticket Master</span>
+        <span className="ml-2 text-2xl">®</span>
+      </div>
+    </div>
+  );
+}
