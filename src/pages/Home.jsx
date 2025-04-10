@@ -42,10 +42,18 @@ useEffect(() => {
 
   const { logo, menu, heading1, heading2, heading3 } = content[0];
 
-  const increaseQuantity = () => setTicketQuantity(ticketQuantity + 1);
-  const decreaseQuantity = () => {
-    if (ticketQuantity > 1) setTicketQuantity(ticketQuantity - 1);
+  const increaseQuantity = () => {
+    if (ticketQuantity < 5) {
+      setTicketQuantity(ticketQuantity + 1);
+    }
   };
+  
+  const decreaseQuantity = () => {
+    if (ticketQuantity > 1) {
+      setTicketQuantity(ticketQuantity - 1);
+    }
+  };
+  
   
   if (showSplash) {
     return <SplashScreen />;
@@ -58,7 +66,7 @@ useEffect(() => {
           <div className="flex items-center justify-left">
             <button className="text-2xl">&#9776;</button>
             <div className="text-xl ml-4 font-bold flex items-center">
-              <span>Ticket Master</span>
+              <span>ticketmaster</span>
               <span className="ml-1">®</span>
             </div>
           </div>
@@ -70,8 +78,8 @@ useEffect(() => {
               className="w-full md:w-48 h-32 object-cover hidden sm:block rounded-lg"
             />
             <div>
-              <h1 className="text-2xl font-bold">{heading1}</h1>
-              <h2 className="text-lg">{heading2}</h2>
+              <h1 className="text-l font-bold">{heading1}</h1>
+              <h2 className="text-l">{heading2}</h2>
               <h3 className="text-md text-gray-300">{heading3}</h3>
             </div>
           </div>
@@ -128,7 +136,7 @@ useEffect(() => {
         {/* Subtotal */}
         <div className="mt-6 border-t pt-4">
           <div className="flex justify-between text-lg font-semibold">
-            <span>Subtotal</span>
+            <span>SUBTOTAL</span>
             <span>${132 * ticketQuantity}.00</span>
           </div>
           <div className="text-sm text-gray-600">{ticketQuantity} Tickets</div>
