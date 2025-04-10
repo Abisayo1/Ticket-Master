@@ -134,7 +134,7 @@ useEffect(() => {
         </div>
 
         {/* Subtotal */}
-        <div className="mt-6 border-t pt-4">
+        <div className="mt-16 border-t pt-4">
           <div className="flex justify-between text-lg font-semibold">
             <span>SUBTOTAL</span>
             <span>${132 * ticketQuantity}.00</span>
