@@ -14,6 +14,8 @@ export default function UploadForm() {
     body3: '',
     body4: '',
     body5: '',
+    ticketQuantity: '',
+    price: '',
     fees: '',
   });
   const [logoFile, setLogoFile] = useState(null);
@@ -44,7 +46,8 @@ export default function UploadForm() {
         logoURL = await getDownloadURL(logoStorageRef);
       }
   
-      const finalData = { ...formData, logo: logoURL };
+      const finalData = { ...formData, ticketQuantity: Number(formData.ticketQuantity),
+        price: Number(formData.price), logo: logoURL };
   
       // Overwrite the data in Firebase Realtime Database
       const dataRef = ref(db, 'uploads/latest'); // fixed path to always overwrite
@@ -63,6 +66,8 @@ export default function UploadForm() {
         body3: '',
         body4: '',
         body5: '',
+        ticketQuantity: '',
+        price: '',
         fees: '',
       });
       setLogoFile(null);
@@ -89,7 +94,7 @@ export default function UploadForm() {
           />
         </div>
 
-        {['heading1', 'heading2', 'heading3', 'heading4', 'body1', 'body2', 'body3', 'body4', 'body5', 'fees'].map((field) => (
+        {['heading1', 'heading2', 'heading3', 'heading4', 'body1', 'body2', 'body3', 'body4', 'body5', 'ticketQuantity', 'price', 'fees'].map((field) => (
           <input
             key={field}
             type="text"

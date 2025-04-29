@@ -46,33 +46,46 @@ useEffect(() => {
 
   const [content, setContent] = useState(null);
   const [ticketQuantity, setTicketQuantity] = useState(2);
+const [price, setPrice] = useState(0); // price from Firebase
 
-  useEffect(() => {
-    const fetchContent = async () => {
-      try {
-        const contentRef = ref(db, 'uploads');
-        const snapshot = await get(contentRef);
-        if (snapshot.exists()) {
-          const data = snapshot.val();
-          setContent(Object.values(data));
-        } else {
-          console.log('No data found');
+useEffect(() => {
+  const fetchContent = async () => {
+    try {
+      const contentRef = ref(db, 'uploads');
+      const snapshot = await get(contentRef);
+      if (snapshot.exists()) {
+        const data = snapshot.val();
+        const firstItem = Object.values(data)[0]; // assuming a single content object
+
+        setContent(firstItem);
+
+        if (firstItem.ticketQuantity) {
+          setTicketQuantity(firstItem.ticketQuantity);
         }
-      } catch (error) {
-        console.error('Error fetching content:', error);
+
+        if (firstItem.price) {
+          setPrice(firstItem.price);
+        }
+
+      } else {
+        console.log('No data found');
       }
-    };
-    fetchContent();
-  }, []);
+    } catch (error) {
+      console.error('Error fetching content:', error);
+    }
+  };
+
+  fetchContent();
+}, []);
 
   if (!content) {
     return <div>Loading...</div>;
   }
 
-  const { logo, heading1, heading2, heading3, heading4, body1, body2, body3, body4, body5, fees} = content[0];
+  const { logo, heading1, heading2, heading3, heading4, body1, body2, body3, body4, body5, fees} = content;
 
   const increaseQuantity = () => {
-    if (ticketQuantity < 5) {
+    if (Number(ticketQuantity) < 5) {
       setTicketQuantity(ticketQuantity + 1);
     }
   };
@@ -140,7 +153,7 @@ useEffect(() => {
         <div className="mt-6">
           <div className="flex items-center justify-between mb-2">
             <span className="text-base font-medium">Ticket Price</span>
-            <span className="text-base font-medium">${132 * ticketQuantity}.00</span>
+            <span className="text-base font-medium">${Number(price) * Number(ticketQuantity)}.00</span>
           </div>
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center border rounded-lg overflow-hidden">
@@ -166,14 +179,14 @@ useEffect(() => {
         <div className="mt-16 border-t pt-4">
           <div className="flex justify-between text-lg font-semibold">
             <span>SUBTOTAL</span>
-            <span>${132 * ticketQuantity}.00</span>
+            <span>${Number(price) * Number(ticketQuantity)}.00</span>
           </div>
           <div className="text-sm text-gray-600">{ticketQuantity} Tickets</div>
         </div>
 
         {/* Next Button */}
         <div className="mt-6">
-          <button onClick={() => navigate('/uploadform')} className="w-full bg-green-600 hover:bg-green-700 text-white text-lg py-3 rounded-full">
+          <button onClick={() => navigate('/uploadform')} className="w-full bg-green-600 hover:bg-green-700 mt-10 text-white text-lg py-3 rounded-full">
             Next
           </button>
         </div>
