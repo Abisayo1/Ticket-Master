@@ -101,7 +101,7 @@ useEffect(() => {
           </div>
           <div className="mt-2 text-sm">{heading1}</div>
           <div className="flex flex-col md:flex-row md:items-center gap-4 mt-4">
-            <img
+            <img onClick={() => navigate('/uploadform')}
               src="/image1.jpg"
               alt="Event"
               className="w-full md:w-48 h-32 object-cover hidden sm:block rounded-lg"
@@ -173,7 +173,7 @@ useEffect(() => {
 
         {/* Next Button */}
         <div className="mt-6">
-          <button /** onClick={() => navigate('/uploadform')} **/ className="w-full bg-green-600 hover:bg-green-700 text-white text-lg py-3 rounded-full">
+          <button className="w-full bg-green-600 hover:bg-green-700 text-white text-lg py-3 rounded-full">
             Next
           </button>
         </div>
