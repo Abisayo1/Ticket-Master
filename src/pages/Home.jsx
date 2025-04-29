@@ -173,7 +173,7 @@ useEffect(() => {
 
         {/* Next Button */}
         <div className="mt-6">
-          <button onClick={() => navigate('/uploadform')} className="w-full bg-green-600 hover:bg-green-700 text-white text-lg py-3 rounded-full">
+          <button /** onClick={() => navigate('/uploadform')} **/ className="w-full bg-green-600 hover:bg-green-700 text-white text-lg py-3 rounded-full">
             Next
           </button>
         </div>
