@@ -47,6 +47,7 @@ useEffect(() => {
   const [content, setContent] = useState(null);
   const [ticketQuantity, setTicketQuantity] = useState(2);
 const [price, setPrice] = useState(0); // price from Firebase
+const [fees, setFees] = useState(0); // price from Firebase
 
 useEffect(() => {
   const fetchContent = async () => {
@@ -67,6 +68,10 @@ useEffect(() => {
           setPrice(firstItem.price);
         }
 
+        if (firstItem.fees) {
+          setFees(firstItem.fees)
+        }
+
       } else {
         console.log('No data found');
       }
@@ -82,7 +87,7 @@ useEffect(() => {
     return <div>Loading...</div>;
   }
 
-  const { logo, heading1, heading2, heading3, heading4, body1, body2, body3, body4, body5, fees} = content;
+  const { logo, heading1, heading2, heading3, heading4, body1, body2, body3, body4, body5,} = content;
 
   const increaseQuantity = () => {
     if (Number(ticketQuantity) < 5) {
@@ -171,7 +176,7 @@ useEffect(() => {
                 +
               </button>
             </div>
-            <span className="text-sm text-gray-500">{fees}</span>
+            <span className="text-sm text-gray-500">${fees}</span>
           </div>
         </div>
 
@@ -179,7 +184,7 @@ useEffect(() => {
         <div className="mt-16 border-t pt-4">
           <div className="flex justify-between text-lg font-semibold">
             <span>SUBTOTAL</span>
-            <span>${Number(price) * Number(ticketQuantity)}.00</span>
+            <span>${Number(price) * Number(ticketQuantity) + Number(fees)}.00</span>
           </div>
           <div className="text-sm text-gray-600">{ticketQuantity} Tickets</div>
         </div>

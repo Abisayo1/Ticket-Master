@@ -47,7 +47,7 @@ export default function UploadForm() {
       }
   
       const finalData = { ...formData, ticketQuantity: Number(formData.ticketQuantity),
-        price: Number(formData.price), logo: logoURL };
+        price: Number(formData.price), fees: Number(formData.fees), logo: logoURL };
   
       // Overwrite the data in Firebase Realtime Database
       const dataRef = ref(db, 'uploads/latest'); // fixed path to always overwrite
