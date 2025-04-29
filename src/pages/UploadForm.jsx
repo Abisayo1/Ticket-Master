@@ -1,90 +1,112 @@
 import React, { useState } from 'react';
 import { ref, push } from 'firebase/database';
-import { db } from '../firebase'; // Correct import for your firebase.js file
+import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { db, storage } from '../firebase'; // Import 'storage' from your firebase.js
 
 export default function UploadForm() {
   const [formData, setFormData] = useState({
-    logo: '',
-    menu: '',
     heading1: '',
     heading2: '',
-    heading3: ''
+    heading3: '',
+    heading4: '',
+    body1: '',
+    body2: '',
+    body3: '',
+    body4: '',
+    body5: '',
+    fees: '',
   });
+  const [logoFile, setLogoFile] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
+  const handleLogoChange = (e) => {
+    if (e.target.files[0]) {
+      setLogoFile(e.target.files[0]);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
 
     try {
-      // Push the formData to Firebase Realtime Database under the 'uploads' node
+      let logoURL = '';
+
+      // Upload logo image if a file is selected
+      if (logoFile) {
+        const logoStorageRef = storageRef(storage, `logos/${Date.now()}_${logoFile.name}`);
+        await uploadBytes(logoStorageRef, logoFile);
+        logoURL = await getDownloadURL(logoStorageRef);
+      }
+
+      const finalData = { ...formData, logo: logoURL };
+
+      // Save data to Firebase Realtime Database
       const dataRef = ref(db, 'uploads');
-      await push(dataRef, formData);
+      await push(dataRef, finalData);
+
       alert('Form submitted and saved to Firebase!');
-      setFormData({ logo: '', menu: '', heading1: '', heading2: '', heading3: '' }); // Clear form after submission
+      // Reset form
+      setFormData({
+        heading1: '',
+        heading2: '',
+        heading3: '',
+        heading4: '',
+        body1: '',
+        body2: '',
+        body3: '',
+        body4: '',
+        body5: '',
+        fees: '',
+      });
+      setLogoFile(null);
     } catch (error) {
       console.error('Error saving to Firebase:', error);
       alert('Failed to save data. Please try again.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="max-w-xl mx-auto p-6 bg-white rounded-2xl shadow-md mt-10">
-      <h2 className="text-2xl font-semibold mb-4 text-center">Upload Content</h2>
+    <div className="max-w-2xl mx-auto p-6 bg-white rounded-2xl shadow-md mt-10">
+      <h2 className="text-2xl font-semibold mb-6 text-center">Upload Content</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
-        <input
-          type="text"
-          name="logo"
-          placeholder="Logo URL"
-          value={formData.logo}
-          onChange={handleChange}
-          className="w-full p-2 border border-gray-300 rounded-xl"
-          required
-        />
-        <input
-          type="text"
-          name="menu"
-          placeholder="Menu"
-          value={formData.menu}
-          onChange={handleChange}
-          className="w-full p-2 border border-gray-300 rounded-xl"
-          required
-        />
-        <input
-          type="text"
-          name="heading1"
-          placeholder="Heading One"
-          value={formData.heading1}
-          onChange={handleChange}
-          className="w-full p-2 border border-gray-300 rounded-xl"
-          required
-        />
-        <input
-          type="text"
-          name="heading2"
-          placeholder="Heading Two"
-          value={formData.heading2}
-          onChange={handleChange}
-          className="w-full p-2 border border-gray-300 rounded-xl"
-          required
-        />
-        <input
-          type="text"
-          name="heading3"
-          placeholder="Heading Three"
-          value={formData.heading3}
-          onChange={handleChange}
-          className="w-full p-2 border border-gray-300 rounded-xl"
-          required
-        />
+        <div>
+          <label className="block mb-1 font-medium">Upload Logo</label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleLogoChange}
+            className="w-full p-2 border border-gray-300 rounded-xl"
+            required
+          />
+        </div>
+
+        {['heading1', 'heading2', 'heading3', 'heading4', 'body1', 'body2', 'body3', 'body4', 'body5', 'fees'].map((field) => (
+          <input
+            key={field}
+            type="text"
+            name={field}
+            placeholder={field.replace(/(\d+)/, ' $1').toUpperCase()}
+            value={formData[field]}
+            onChange={handleChange}
+            className="w-full p-2 border border-gray-300 rounded-xl"
+            required
+          />
+        ))}
+
         <button
           type="submit"
+          disabled={isSubmitting}
           className="w-full bg-blue-600 text-white py-2 rounded-xl hover:bg-blue-700 transition duration-200"
         >
-          Submit
+          {isSubmitting ? 'Submitting...' : 'Submit'}
         </button>
       </form>
     </div>

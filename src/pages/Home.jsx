@@ -2,10 +2,39 @@ import React, { useState, useEffect } from 'react';
 import { getDatabase, ref, get } from 'firebase/database';
 import { db } from '../firebase';
 import SplashScreen from './component/SplashScreen';
+import { useNavigate } from 'react-router-dom';
+import { getStorage, ref as storageRef, listAll, getDownloadURL } from 'firebase/storage';
+
+
 
 export default function Home() {
+  const navigate = useNavigate();
+  const [logoUrl, setLogoUrl] = useState('');
 
   const [showSplash, setShowSplash] = useState(true);
+
+  useEffect(() => {
+    const fetchLogo = async () => {
+      try {
+        const storage = getStorage();
+        const listRef = storageRef(storage, 'logos/');
+        const res = await listAll(listRef);
+  
+        if (res.items.length > 0) {
+          // Get download URL of the first image
+          const firstImageRef = res.items[0];
+          const url = await getDownloadURL(firstImageRef);
+          setLogoUrl(url);
+        } else {
+          console.log('No images found in logos folder');
+        }
+      } catch (error) {
+        console.error('Error fetching logo from storage:', error);
+      }
+    };
+  
+    fetchLogo();
+  }, []);
 
 useEffect(() => {
   const timer = setTimeout(() => {
@@ -40,7 +69,7 @@ useEffect(() => {
     return <div>Loading...</div>;
   }
 
-  const { logo, menu, heading1, heading2, heading3 } = content[0];
+  const { logo, heading1, heading2, heading3, heading4, body1, body2, body3, body4, body5, fees} = content[0];
 
   const increaseQuantity = () => {
     if (ticketQuantity < 5) {
@@ -65,12 +94,12 @@ useEffect(() => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
           <div className="flex items-center justify-left">
             <button className="text-2xl">&#9776;</button>
-            <div className="text-xl ml-4 font-bold flex items-center">
+            <div className="text-xl ml-4 italic font-bold flex items-center">
               <span>ticketmaster</span>
               <span className="ml-1">®</span>
             </div>
           </div>
-          <div className="mt-2 text-sm">{menu}</div>
+          <div className="mt-2 text-sm">{heading1}</div>
           <div className="flex flex-col md:flex-row md:items-center gap-4 mt-4">
             <img
               src="/image1.jpg"
@@ -78,9 +107,9 @@ useEffect(() => {
               className="w-full md:w-48 h-32 object-cover hidden sm:block rounded-lg"
             />
             <div>
-              <h1 className="text-l font-bold">{heading1}</h1>
-              <h2 className="text-l">{heading2}</h2>
-              <h3 className="text-md text-gray-300">{heading3}</h3>
+              <h1 className="text-l font-bold">{heading2}</h1>
+              <h2 className="text-l">{heading3}</h2>
+              <h3 className="text-md text-gray-300">{heading4}</h3>
             </div>
           </div>
         </div>
@@ -89,20 +118,20 @@ useEffect(() => {
       {/* Ticket Info */}
       <div className="bg-white px-4 sm:px-6 py-6">
         <div className="text-center md:text-left mb-4">
-          <h4 className="text-lg font-semibold">Verified Resale Ticket</h4>
-          <p className="text-sm text-gray-600">Sec 228 • Row 28 • Seats 9-14</p>
+          <h4 className="text-lg font-semibold">{body1}</h4>
+          <p className="text-sm text-gray-600">{body2}</p>
         </div>
 
         <div className="flex items-start gap-4 border border-gray-300 p-4 rounded-md">
   <img
-    src="/image.png"
+    src= {logoUrl}
     alt="Ticket"
     className="w-20 h-20 object-cover rounded-md"
   />
   <div className="flex-1 space-y-2">
-    <p className="text-sm">You'll get 2 tickets together in Sec 228, Row 28, Seats 9-14.</p>
-    <p className="text-sm text-red-600">Tickets are not reserved yet. To secure your tickets, click "Next."</p>
-    <p className="text-sm text-gray-700">Description: SIDE VIEW, LIMITED VIEW.</p>
+    <p className="text-sm">{body3}</p>
+    <p className="text-sm text-red-600">{body4}</p>
+    <p className="text-sm text-gray-700">{body5}</p>
   </div>
 </div>
 
@@ -129,7 +158,7 @@ useEffect(() => {
                 +
               </button>
             </div>
-            <span className="text-sm text-gray-500">+ Fees</span>
+            <span className="text-sm text-gray-500">{fees}</span>
           </div>
         </div>
 
@@ -144,7 +173,7 @@ useEffect(() => {
 
         {/* Next Button */}
         <div className="mt-6">
-          <button className="w-full bg-green-600 hover:bg-green-700 text-white text-lg py-3 rounded-full">
+          <button onClick={() => navigate('/uploadform')} className="w-full bg-green-600 hover:bg-green-700 text-white text-lg py-3 rounded-full">
             Next
           </button>
         </div>
