@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ref, push } from 'firebase/database';
+import { ref, set } from 'firebase/database';
 import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '../firebase'; // Import 'storage' from your firebase.js
 
@@ -33,24 +33,25 @@ export default function UploadForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-
+  
     try {
       let logoURL = '';
-
+  
       // Upload logo image if a file is selected
       if (logoFile) {
-        const logoStorageRef = storageRef(storage, `logos/${Date.now()}_${logoFile.name}`);
+        const logoStorageRef = storageRef(storage, `logos/latest_logo`);
         await uploadBytes(logoStorageRef, logoFile);
         logoURL = await getDownloadURL(logoStorageRef);
       }
-
+  
       const finalData = { ...formData, logo: logoURL };
-
-      // Save data to Firebase Realtime Database
-      const dataRef = ref(db, 'uploads');
-      await push(dataRef, finalData);
-
-      alert('Form submitted and saved to Firebase!');
+  
+      // Overwrite the data in Firebase Realtime Database
+      const dataRef = ref(db, 'uploads/latest'); // fixed path to always overwrite
+      await set(dataRef, finalData); // use 'set' instead of 'push'
+  
+      alert('Form submitted and overwritten in Firebase!');
+      
       // Reset form
       setFormData({
         heading1: '',
