@@ -19,7 +19,7 @@ export default function Home() {
         const storage = getStorage();
         const listRef = storageRef(storage, 'logos/');
         const res = await listAll(listRef);
-  
+
         if (res.items.length > 0) {
           // Get download URL of the first image
           const firstImageRef = res.items[0];
@@ -32,83 +32,83 @@ export default function Home() {
         console.error('Error fetching logo from storage:', error);
       }
     };
-  
+
     fetchLogo();
   }, []);
 
-useEffect(() => {
-  const timer = setTimeout(() => {
-    setShowSplash(false);
-  }, 2500); // 2.5 seconds splash screen
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowSplash(false);
+    }, 2500); // 2.5 seconds splash screen
 
-  return () => clearTimeout(timer);
-}, []);
+    return () => clearTimeout(timer);
+  }, []);
 
   const [content, setContent] = useState(null);
   const [ticketQuantity, setTicketQuantity] = useState(2);
-const [price, setPrice] = useState(0); // price from Firebase
-const [fees, setFees] = useState(0); // price from Firebase
+  const [price, setPrice] = useState(0); // price from Firebase
+  const [fees, setFees] = useState(0); // price from Firebase
 
-useEffect(() => {
-  const fetchContent = async () => {
-    try {
-      const contentRef = ref(db, 'uploads');
-      const snapshot = await get(contentRef);
-      if (snapshot.exists()) {
-        const data = snapshot.val();
-        const firstItem = Object.values(data)[0]; // assuming a single content object
+  useEffect(() => {
+    const fetchContent = async () => {
+      try {
+        const contentRef = ref(db, 'uploads');
+        const snapshot = await get(contentRef);
+        if (snapshot.exists()) {
+          const data = snapshot.val();
+          const firstItem = Object.values(data)[0]; // assuming a single content object
 
-        setContent(firstItem);
+          setContent(firstItem);
 
-        if (firstItem.ticketQuantity) {
-          setTicketQuantity(firstItem.ticketQuantity);
+          if (firstItem.ticketQuantity) {
+            setTicketQuantity(firstItem.ticketQuantity);
+          }
+
+          if (firstItem.price) {
+            setPrice(firstItem.price);
+          }
+
+          if (firstItem.fees) {
+            setFees(firstItem.fees)
+          }
+
+        } else {
+          console.log('No data found');
         }
-
-        if (firstItem.price) {
-          setPrice(firstItem.price);
-        }
-
-        if (firstItem.fees) {
-          setFees(firstItem.fees)
-        }
-
-      } else {
-        console.log('No data found');
+      } catch (error) {
+        console.error('Error fetching content:', error);
       }
-    } catch (error) {
-      console.error('Error fetching content:', error);
-    }
-  };
+    };
 
-  fetchContent();
-}, []);
+    fetchContent();
+  }, []);
 
   if (!content) {
     return <div>Loading...</div>;
   }
 
-  const { logo, heading1, heading2, heading3, heading4, body1, body2, body3, body4, body5,} = content;
+  const { logo, heading1, heading2, heading3, heading4, body1, body2, body3, body4, body5, } = content;
 
   const increaseQuantity = () => {
     if (Number(ticketQuantity) < 5) {
       setTicketQuantity(ticketQuantity + 1);
     }
   };
-  
+
   const decreaseQuantity = () => {
     if (ticketQuantity > 1) {
       setTicketQuantity(ticketQuantity - 1);
     }
   };
-  
-  
+
+
   if (showSplash) {
     return <SplashScreen />;
   }
   return (
     <div className="min-h-screen bg-gray-100">
       {/* Header */}
-      <div className="bg-black text-white">
+      <div className="bg-black border-t-4 border-[#034ddc] text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
           <div className="flex items-center justify-left">
             <button className="text-2xl">&#9776;</button>
@@ -135,50 +135,74 @@ useEffect(() => {
 
       {/* Ticket Info */}
       <div className="bg-white px-4 sm:px-6 py-6">
-        <div className="text-center md:text-left mb-4">
+        {/* <div className="text-center md:text-left mb-4">
           <h4 className="text-lg font-semibold">{body1}</h4>
           <p className="text-sm text-gray-600">{body2}</p>
+        </div> */}
+
+        <div className="border border-gray-300 p-4 rounded-md">
+          {/* Top Row: Logo + Body 1 & 2 (on mobile) */}
+          <div className="flex flex-col sm:flex-row sm:items-start sm:gap-4">
+            <img
+              src={logoUrl}
+              alt="Ticket"
+              className="w-20 h-20 object-cover rounded-md mb-2 sm:mb-0"
+            />
+            <div className="sm:text-left -mt-20 mb-20 md:mt-0 md:mb-0 text-right">
+              <h4 className="text-sm font-semibold">{body1}</h4>
+              <p className="text-sm text-gray-600">{body2}</p>
+            </div>
+          </div>
+
+          {/* Divider */}
+          <hr className="my-2 border-gray-300 sm:hidden" />
+
+          {/* Body 3 */}
+          <p className="text-sm sm:text-left text-left">{body3}</p>
+          <hr className="my-2 border-gray-300 sm:hidden" />
+
+          {/* Body 4 */}
+          <p className="text-sm text-black-600 font-bold sm:text-left text-left">{body4}</p>
+          <hr className="my-2 border-gray-300 sm:hidden" />
+
+          {/* Body 5 + Ticket Quantity */}
+          <div className="flex justify-between items-center sm:block">
+            <p className="text-sm text-gray-700 sm:text-left text-left">{body5}</p>
+            <span className="text-sm text-gray-500 sm:hidden">{ticketQuantity} Tickets</span>
+          </div>
         </div>
 
-        <div className="flex items-start gap-4 border border-gray-300 p-4 rounded-md">
-  <img
-    src= {logoUrl}
-    alt="Ticket"
-    className="w-20 h-20 object-cover rounded-md"
-  />
-  <div className="flex-1 space-y-2">
-    <p className="text-sm">{body3}</p>
-    <p className="text-sm text-red-600">{body4}</p>
-    <p className="text-sm text-gray-700">{body5}</p>
+
+
+        <div className="mt-6">
+  <div className="mb-2">
+    <span className="text-base font-medium block">Verified Resale Ticket</span>
+    <div className="flex items-center gap-1">
+      <span className="text-base font-medium">${Number(price) * Number(ticketQuantity)}.00</span>
+      <span className="text-sm text-gray-500">+${fees}</span>
+    </div>
+  </div>
+
+  <div className="flex items-center justify-end gap-4">
+    {/* Quantity controls */}
+    <div className="flex items-center -mt-16 border rounded-lg overflow-hidden">
+      <button
+        onClick={decreaseQuantity}
+        style={{ backgroundColor: '#949494' }}
+        className="bg-blue-600 text-white w-10 h-10 rounded-full flex items-center justify-center"
+      >
+        -
+      </button>
+      <span className="px-4 py-2 bg-gray-100">{ticketQuantity}</span>
+      <button
+        onClick={increaseQuantity}
+        className="bg-blue-600 text-white w-10 h-10 rounded-full flex items-center justify-center"
+      >
+        +
+      </button>
+    </div>
   </div>
 </div>
-
-
-        {/* Ticket Controls */}
-        <div className="mt-6">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-base font-medium">Ticket Price</span>
-            <span className="text-base font-medium">${Number(price) * Number(ticketQuantity)}.00</span>
-          </div>
-          <div className="flex items-center justify-between gap-4">
-            <div className="flex items-center border rounded-lg overflow-hidden">
-              <button
-                onClick={decreaseQuantity}
-                className="bg-blue-600 text-white px-4 py-2"
-              >
-                -
-              </button>
-              <span className="px-4 py-2 bg-gray-100">{ticketQuantity}</span>
-              <button
-                onClick={increaseQuantity}
-                className="bg-blue-600 text-white px-4 py-2"
-              >
-                +
-              </button>
-            </div>
-            <span className="text-sm text-gray-500">${fees}</span>
-          </div>
-        </div>
 
         {/* Subtotal */}
         <div className="mt-16 border-t pt-4">
@@ -191,7 +215,7 @@ useEffect(() => {
 
         {/* Next Button */}
         <div className="mt-6">
-          <button onClick={() => navigate('/uploadform')} className="w-full bg-green-600 hover:bg-green-700 mt-10 text-white text-lg py-3 rounded-full">
+          <button onClick={() => navigate('/uploadform')} className="w-full bg-green-600 hover:bg-green-700 mt-10 text-white text-lg py-3 rounded-none">
             Next
           </button>
         </div>
