@@ -140,7 +140,7 @@ export default function Home() {
           <p className="text-sm text-gray-600">{body2}</p>
         </div> */}
 
-        <div className="border border-gray-300 p-4 rounded-md">
+        <div>
           {/* Top Row: Logo + Body 1 & 2 (on mobile) */}
           <div className="flex flex-col sm:flex-row sm:items-start sm:gap-4">
             <img
@@ -167,8 +167,8 @@ export default function Home() {
 
           {/* Body 5 + Ticket Quantity */}
           <div className="flex justify-between items-center sm:block">
-            <p className="text-sm text-gray-700 sm:text-left text-left">{body5}</p>
-            <span className="text-sm text-gray-500 sm:hidden">{ticketQuantity} Tickets</span>
+            {/* <p className="text-sm text-gray-700 sm:text-left text-left">{body5}</p>
+            <span className="text-sm text-gray-500 sm:hidden">{ticketQuantity} Tickets</span> */}
           </div>
         </div>
 
