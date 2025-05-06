@@ -62,19 +62,6 @@ export default function HeaderDesktop() {
                             </p>
                         </div>
 
-                        {/* Parking */}
-                        <div className="bg-white relative z-10 text-black rounded-lg p-4 shadow">
-                            <h2 className="text-lg font-bold">PARKING</h2>
-                            <div className="text-right">^</div>
-                        </div>
-
-                        {/* Payment */}
-                        <div className="bg-white text-black rounded-lg p-4 shadow">
-                            <h2 className="text-lg font-bold">PAYMENT</h2>
-                            <button className="mt-2 px-4 py-1 text-sm font-semibold text-red-600 border border-red-600 rounded">
-                                SELECTION REQUIRED
-                            </button>
-                        </div>
                     </div>
 
                     

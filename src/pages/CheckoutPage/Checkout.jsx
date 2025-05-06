@@ -5,6 +5,10 @@ import ChSection1 from './ChSection1'
 import TicketInsurance from './TicketInsurance'
 import TicketOrder from './TicketOrder'
 import TicketOrderDesktop from './TicketOrderDesktop'
+import DesktopPayment from './DesktopPayment'
+import DesktopTicketInsurance from './DesktopTicketInsurance'
+import DesktopTicketOrder from './DesktopTicketOrder'
+import ConcertTicket from './ConcertTicket'
 
 const Checkout = () => {
   return (
@@ -15,13 +19,16 @@ const Checkout = () => {
 
         {/* Payment Section */ }
         <ChSection1/>
+        <DesktopPayment/>
 
         {/* Ticket Insurance */ }
         <TicketInsurance/>
+        <DesktopTicketInsurance />
 
         {/* Ticket Order */ }
         <TicketOrder/>
-        {/* <TicketOrderDesktop /> */}
+        <DesktopTicketOrder />
+        <ConcertTicket />
 
     </div>
   )
