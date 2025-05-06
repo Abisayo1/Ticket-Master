@@ -4,12 +4,14 @@ import { db } from '../firebase';
 import SplashScreen from './component/SplashScreen';
 import { useNavigate } from 'react-router-dom';
 import { getStorage, ref as storageRef, listAll, getDownloadURL } from 'firebase/storage';
-
+import LoadingOverlay from './component/LoadingOverlay';
 
 
 export default function Home() {
   const navigate = useNavigate();
   const [logoUrl, setLogoUrl] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
 
   const [showSplash, setShowSplash] = useState(true);
 
@@ -105,8 +107,12 @@ export default function Home() {
   if (showSplash) {
     return <SplashScreen />;
   }
+
+  
+
   return (
     <div className="min-h-screen bg-gray-100">
+      {isLoading && <LoadingOverlay />}
       {/* Header */}
       <div className="bg-black border-t-4 border-[#034ddc] text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
@@ -175,34 +181,34 @@ export default function Home() {
 
 
         <div className="mt-6">
-  <div className="mb-2">
-    <span className="text-base font-medium block">Verified Resale Ticket</span>
-    <div className="flex items-center gap-1">
-      <span className="text-base font-medium">${Number(price) * Number(ticketQuantity)}.00</span>
-      <span className="text-sm text-gray-500">+${fees}</span>
-    </div>
-  </div>
+          <div className="mb-2">
+            <span className="text-base font-medium block">Verified Resale Ticket</span>
+            <div className="flex items-center gap-1">
+              <span className="text-base font-medium">${Number(price) * Number(ticketQuantity)}.00</span>
+              <span className="text-sm text-gray-500">+${fees}</span>
+            </div>
+          </div>
 
-  <div className="flex items-center justify-end gap-4">
-    {/* Quantity controls */}
-    <div className="flex items-center -mt-16 border rounded-lg overflow-hidden">
-      <button
-        onClick={decreaseQuantity}
-        style={{ backgroundColor: '#949494' }}
-        className="bg-blue-600 text-white w-10 h-10 rounded-full flex items-center justify-center"
-      >
-        -
-      </button>
-      <span className="px-4 py-2 bg-gray-100">{ticketQuantity}</span>
-      <button
-        onClick={increaseQuantity}
-        className="bg-blue-600 text-white w-10 h-10 rounded-full flex items-center justify-center"
-      >
-        +
-      </button>
-    </div>
-  </div>
-</div>
+          <div className="flex items-center justify-end gap-4">
+            {/* Quantity controls */}
+            <div className="flex items-center -mt-16 border rounded-lg overflow-hidden">
+              <button
+                onClick={decreaseQuantity}
+                style={{ backgroundColor: '#949494' }}
+                className="bg-blue-600 text-white w-10 h-10 rounded-full flex items-center justify-center"
+              >
+                -
+              </button>
+              <span className="px-4 py-2 bg-gray-100">{ticketQuantity}</span>
+              <button
+                onClick={increaseQuantity}
+                className="bg-blue-600 text-white w-10 h-10 rounded-full flex items-center justify-center"
+              >
+                +
+              </button>
+            </div>
+          </div>
+        </div>
 
         {/* Subtotal */}
         <div className="mt-16 border-t pt-4">
@@ -215,7 +221,15 @@ export default function Home() {
 
         {/* Next Button */}
         <div className="mt-6">
-          <button onClick={() => navigate('/uploadform')} className="w-full bg-green-600 hover:bg-green-700 mt-10 text-white text-lg py-3 rounded-none">
+          <button
+            onClick={() => {
+              setIsLoading(true);
+              setTimeout(() => {
+                navigate('/checkout');
+              }, 2000); // Simulate 2s delay before navigating
+            }}
+            className="w-full bg-green-600 hover:bg-green-700 mt-10 text-white text-lg py-3 rounded-none"
+          >
             Next
           </button>
         </div>

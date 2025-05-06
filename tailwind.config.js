@@ -5,7 +5,18 @@ export default {
     "./src/**/*.{js,jsx,ts,tsx}", // 👈 includes all component files
   ],
   theme: {
-    extend: {},
+    extend: {
+      animation: {
+        'spin-slow': 'spin 2s linear infinite',
+        'spin-reverse': 'spin-reverse 1.5s linear infinite',
+      },
+      keyframes: {
+        'spin-reverse': {
+          '0%': { transform: 'rotate(360deg)' },
+          '100%': { transform: 'rotate(0deg)' },
+        },
+    },
   },
   plugins: [],
+}
 }
