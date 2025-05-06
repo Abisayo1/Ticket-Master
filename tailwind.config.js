@@ -18,7 +18,7 @@ export default {
     },
 
     screens: {
-      'tablet': {'min': '500px', 'max': '768px'}, // 👈 custom tablet range
+      'tablet': {'min': '300px', 'max': '768px'}, // 👈 custom tablet range
     },
 
   },
