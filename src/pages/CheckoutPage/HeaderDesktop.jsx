@@ -12,7 +12,7 @@ export default function HeaderDesktop() {
     }, []);
 
     return (
-        <div className="min-h-screen hidden relative sm:block bg-black text-white font-sans">
+        <div className="hidden relative sm:block bg-black text-white font-sans">
             {/* Logo Header */}
         <div className="sticky top-0 z-50  border-t-4 border-[#034ddc] bg-black px-4 py-3 overflow-hidden transition-all duration-500 ease-in-out">
     {/* Striped top-right decoration - only visible when not scrolled */}
