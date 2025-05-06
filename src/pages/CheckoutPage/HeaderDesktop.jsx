@@ -14,7 +14,8 @@ export default function HeaderDesktop() {
     return (
         <div className="hidden relative sm:block bg-black text-white font-sans">
             {/* Logo Header */}
-        <div className="sticky top-0 z-50  border-t-4 border-[#034ddc] bg-black px-4 py-3 overflow-hidden transition-all duration-500 ease-in-out">
+            <div className="fixed top-0 w-full z-50 border-t-4 border-[#034ddc] bg-black px-4 py-3 overflow-hidden transition-all duration-500 ease-in-out">
+
     {/* Striped top-right decoration - only visible when not scrolled */}
     {!scrolled && (
         <div className="absolute top-0 right-0 w-28 h-16 bg-[repeating-linear-gradient(-45deg,_#444_0,_#444_2px,_transparent_2px,_transparent_4px)] pointer-events-none z-10 transition-opacity duration-500 ease-in-out opacity-100" />

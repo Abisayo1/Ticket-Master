@@ -59,15 +59,42 @@ const HeaderCheckout = () => {
 
                     {/* Delivery Info Card */}
                     <div className="relative z-10 mx-4 mt-11 mb-6 p-4 bg-white text-black rounded shadow-md">
-                        <h3 className="font-bold">DELIVERY</h3>
-                        <div className="flex justify-between items-center mt-2">
-                            <span className="text-sm">Mobile</span>
-                            <span className="text-sm font-semibold">FREE</span>
-                        </div>
-                        <p className="text-sm text-gray-700">
-                            To access your tickets for entry, you’ll need to download the Ticketmaster App or add your tickets to your mobile wallet.
-                        </p>
-                    </div>
+    <h3 className="font-bold mb-4">DELIVERY</h3>
+
+    {/* Name Input */}
+    <div className="mb-4">
+        <label htmlFor="name" className="block text-sm font-medium mb-1">Full Name</label>
+        <input
+            type="text"
+            id="name"
+            name="name"
+            className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Enter your full name"
+        />
+    </div>
+
+    {/* Email Input */}
+    <div className="mb-4">
+        <label htmlFor="email" className="block text-sm font-medium mb-1">Email Address</label>
+        <input
+            type="email"
+            id="email"
+            name="email"
+            className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Enter your email address"
+        />
+    </div>
+
+    <div className="flex justify-between items-center mt-2 mb-2">
+        <span className="text-sm">Mobile</span>
+        <span className="text-sm font-semibold">FREE</span>
+    </div>
+
+    <p className="text-sm text-gray-700">
+        To access your tickets for entry, you’ll need to download the Ticketmaster App or add your tickets to your mobile wallet.
+    </p>
+</div>
+
                 </div>
             </div>             
         </div>
