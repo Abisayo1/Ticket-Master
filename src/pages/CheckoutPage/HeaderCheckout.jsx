@@ -62,8 +62,17 @@ const HeaderCheckout = () => {
     <h3 className="font-bold mb-4">DELIVERY</h3>
 
     {/* Name Input */}
-    <div className="mb-4">
-        <label htmlFor="name" className="block text-sm font-medium mb-1">Full Name</label>
+    <div className="flex justify-between items-center mt-2 mb-2">
+        <span className="text-sm">Mobile</span>
+        <span className="text-sm font-semibold">FREE</span>
+    </div>
+
+    <p className="text-sm text-gray-700">
+    These mobile tickets will be transferred to you directly from a trusted seller. You'll receive an email with instructions on how to accept them on the original ticket provider's mobile app. Please provide details needed for the transfer.
+    </p>
+
+    <div className=" mt-3 mb-4">
+        <label htmlFor="name" className="block text-sm font-medium mb-1">Name</label>
         <input
             type="text"
             id="name"
@@ -85,14 +94,7 @@ const HeaderCheckout = () => {
         />
     </div>
 
-    <div className="flex justify-between items-center mt-2 mb-2">
-        <span className="text-sm">Mobile</span>
-        <span className="text-sm font-semibold">FREE</span>
-    </div>
-
-    <p className="text-sm text-gray-700">
-        To access your tickets for entry, you’ll need to download the Ticketmaster App or add your tickets to your mobile wallet.
-    </p>
+  
 </div>
 
                 </div>

@@ -47,26 +47,48 @@ export default function HeaderDesktop() {
                     <span className="border-b-4 border-blue-500 pb-1">CHECKOUT</span>
                 </div>
 
-                {/* Content layout */}
-                <div className="grid relative z-10 grid-cols-1 lg:grid-cols-2 gap-8">
-                    {/* Left section */}
-                    <div className="space-y-6">
-                        {/* Delivery */}
-                        <div className="bg-white text-black rounded-lg p-4 shadow">
-                            <h2 className="text-lg font-bold">DELIVERY</h2>
-                            <div className="flex justify-between">
-                                <span>Mobile</span>
-                                <span className="font-bold">FREE</span>
-                            </div>
-                            <p className="text-sm mt-2">
-                                To access your tickets for entry, you’ll need to download the Ticketmaster App or add your tickets to your mobile wallet.
-                            </p>
-                        </div>
+             {/* Content layout */}
+<div className="grid relative z-10 grid-cols-1 lg:grid-cols-2 gap-8">
+    {/* Left section */}
+    <div className="space-y-6">
+        {/* Delivery */}
+        <div className="bg-white text-black rounded-lg p-4 shadow">
+            <h2 className="text-lg font-bold">DELIVERY</h2>
+            <div className="flex justify-between">
+                <span>Mobile</span>
+                <span className="font-bold">FREE</span>
+            </div>
+            <p className="text-sm mt-2">
+                These mobile tickets will be transferred to you directly from a trusted seller. You'll receive an email with instructions on how to accept them on the original ticket provider's mobile app. Please provide details needed for the transfer.
+            </p>
 
-                    </div>
+            {/* Name Input */}
+            <div className="mt-4">
+                <label htmlFor="name" className="block text-sm font-medium mb-1">Name</label>
+                <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    placeholder="Enter your full name"
+                    className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+            </div>
 
-                    
-                </div>
+            {/* Email Input */}
+            <div className="mt-4">
+                <label htmlFor="email" className="block text-sm font-medium mb-1">Email Address</label>
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Enter your email address"
+                    className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+            </div>
+        </div>
+    </div>
+</div>
+
             </div>
 
         </div>
