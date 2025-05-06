@@ -16,7 +16,16 @@ export default {
           '100%': { transform: 'rotate(0deg)' },
         },
     },
+
+    screens: {
+      'tablet': {'min': '500px', 'max': '768px'}, // 👈 custom tablet range
+    },
+
   },
   plugins: [],
 }
+
 }
+
+
+

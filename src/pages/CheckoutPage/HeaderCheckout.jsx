@@ -13,7 +13,7 @@ const HeaderCheckout = () => {
     }, []);
 
     return (
-        <div className="min-h-screen block sm:hidden bg-gray-100">
+        <div className="min-h-screen -mb-8 block sm:hidden tablet:-mb-32 bg-gray-100">
             {/* Mobile-Only: Sticky ticketmaster header */}
             <div
                 className="fixed top-0 w-full flex justify-center z-50 border-t-[2px] bg-black text-white"  // Added sm:hidden to hide on desktop
@@ -58,22 +58,18 @@ const HeaderCheckout = () => {
                     </div>
 
                     {/* Delivery Info Card */}
-                    <div className="relative z-10 mx-4 mt-4 mb-6 p-4 bg-white text-black rounded shadow-md">
+                    <div className="relative z-10 mx-4 mt-11 mb-6 p-4 bg-white text-black rounded shadow-md">
                         <h3 className="font-bold">DELIVERY</h3>
                         <div className="flex justify-between items-center mt-2">
                             <span className="text-sm">Mobile</span>
                             <span className="text-sm font-semibold">FREE</span>
                         </div>
-                        <p className="text-sm text-gray-700 mt-2">
+                        <p className="text-sm text-gray-700">
                             To access your tickets for entry, you’ll need to download the Ticketmaster App or add your tickets to your mobile wallet.
                         </p>
                     </div>
                 </div>
-            </div>
-
-
-             {/* Desktop-Only: Content starts here */}
-             
+            </div>             
         </div>
     );
 };
