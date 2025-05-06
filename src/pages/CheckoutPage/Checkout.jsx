@@ -21,7 +21,7 @@ const Checkout = () => {
 
         {/* Ticket Order */ }
         <TicketOrder/>
-        <TicketOrderDesktop />
+        {/* <TicketOrderDesktop /> */}
 
     </div>
   )
