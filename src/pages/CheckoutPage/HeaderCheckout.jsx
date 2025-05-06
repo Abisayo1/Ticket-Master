@@ -13,7 +13,7 @@ const HeaderCheckout = () => {
     }, []);
 
     return (
-        <div className="min-h-screen -mb-8 block sm:hidden tablet:-mb-32 bg-gray-100">
+        <div className="-mb-8 block sm:hidden tablet:-mb-32 bg-gray-100">
             {/* Mobile-Only: Sticky ticketmaster header */}
             <div
                 className="fixed top-0 w-full flex justify-center z-50 border-t-[2px] bg-black text-white"  // Added sm:hidden to hide on desktop
