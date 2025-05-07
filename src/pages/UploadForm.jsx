@@ -14,6 +14,7 @@ export default function UploadForm() {
     body3: '',
     body4: '',
     body5: '',
+    insuranceFee: '',
     ticketQuantity: '',
     price: '',
     fees: '',
@@ -66,6 +67,7 @@ export default function UploadForm() {
         body3: '',
         body4: '',
         body5: '',
+        insuranceFee: '',
         ticketQuantity: '',
         price: '',
         fees: '',
@@ -94,7 +96,7 @@ export default function UploadForm() {
           />
         </div>
 
-        {['heading1', 'heading2', 'heading3', 'heading4', 'body1', 'body2', 'body3', 'body4', 'body5', 'ticketQuantity', 'price', 'fees'].map((field) => (
+        {['heading1', 'heading2', 'heading3', 'heading4', 'body1', 'body2', 'body3', 'body4', 'body5', 'insuranceFee', 'ticketQuantity', 'price', 'fees'].map((field) => (
           <input
             key={field}
             type="text"
