@@ -1,26 +1,74 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { ref, get } from "firebase/database";
+import { db } from "../../firebase"; // Adjust path as needed
 
-export default function DesktopTicketOrder() {
+export default function TicketOrder() {
+  const [data, setData] = useState({
+    ticketQuantity: 0,
+    price: 0,
+    fees: 0,
+    insuranceFee: 0,
+    processingFee: 0,
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const uploadsSnap = await get(ref(db, "uploads/latest"));
+        const checkoutSnap = await get(ref(db, "uploadcheckout/latest"));
+
+        const uploads = uploadsSnap.val() || {};
+        const checkout = checkoutSnap.val() || {};
+
+        setData({
+          ticketQuantity: Number(uploads.ticketQuantity) || 0,
+          price: Number(uploads.price) || 0,
+          fees: Number(uploads.fees) || 0,
+          insuranceFee: Number(uploads.insuranceFee) || 0,
+          processingFee: Number(checkout.processingFee) || 0,
+        });
+      } catch (err) {
+        console.error("Error fetching ticket order data:", err);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const { ticketQuantity, price, fees, insuranceFee, processingFee } = data;
+
+  const subtotal = ticketQuantity * price;
+  const totalFees = ticketQuantity * fees;
+  const totalInsurance = ticketQuantity * insuranceFee;
+  const total = subtotal + totalFees + totalInsurance + processingFee;
+
   return (
     <div className="max-w-xl p-20 absolute right-20 top-48 border hidden sm:block bg-white rounded-2xl shadow-md">
-
-      <h2 className="text-2xl font-semibold mb-4">TOTAL <span className="float-right">$501.37</span></h2>
+      <h2 className="text-2xl font-semibold mb-4">
+        TOTAL <span className="float-right">${total.toFixed(2)}</span>
+      </h2>
 
       <div className="mb-4">
         <h3 className="text-lg font-semibold">Tickets</h3>
-        <p className="text-sm text-gray-500">Verified Resale Tickets: $209.00 x 2</p>
-        <p className="text-right font-medium">$418.00</p>
+        <p className="text-sm text-gray-500">
+          Verified Resale Tickets: ${price.toFixed(2)} x {ticketQuantity}
+        </p>
+        <p className="text-right font-medium">${subtotal.toFixed(2)}</p>
       </div>
 
       <div className="mb-4">
         <h3 className="text-lg font-semibold">Fees</h3>
         <div className="flex justify-between text-sm text-gray-500">
-          <span>Service Fee: $39.71 x 2</span>
-          <span>$79.42</span>
+          <span>Service Fee: ${fees.toFixed(2)} x {ticketQuantity}</span>
+          <span>${totalFees.toFixed(2)}</span>
         </div>
         <div className="flex justify-between text-sm text-gray-500">
           <span>Order Processing Fee</span>
-          <span>$3.95</span>
+          <span>${processingFee.toFixed(2)}</span>
+        </div>
+        <div className="flex justify-between text-sm text-gray-500">
+          <span>Insurance Fee: ${insuranceFee.toFixed(2)} x {ticketQuantity}</span>
+          <span>${totalInsurance.toFixed(2)}</span>
         </div>
       </div>
 
