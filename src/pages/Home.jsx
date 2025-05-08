@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { getDatabase, ref, get } from 'firebase/database';
+import { set } from 'firebase/database';
 import { db } from '../firebase';
 import SplashScreen from './component/SplashScreen';
 import { useNavigate } from 'react-router-dom';
@@ -220,20 +221,31 @@ export default function Home() {
         </div>
 
         {/* Next Button */}
-        <div className="mt-6">
-          <button
-            onClick={() => {
-              setIsLoading(true);
-              setTimeout(() => {
-                navigate('/checkout');
-              }, 2000); // Simulate 2s delay before navigating
-            }}
-            className="w-full bg-green-600 hover:bg-green-700 mt-10 text-white text-lg py-3 rounded-none"
-          >
-            Next
-          </button>
+        <button
+  onClick={async () => {
+    try {
+      setIsLoading(true);
+
+      // Reference to your 'uploads/latest/ticketQuantity' path
+      const ticketRef = ref(db, 'uploads/latest/ticketQuantity');
+
+      // Update the ticket quantity in the database
+      await set(ticketRef, ticketQuantity);
+
+      // Navigate after setting the value
+      navigate('/checkout');
+    } catch (error) {
+      console.error('Error updating ticket quantity:', error);
+      setIsLoading(false);
+    }
+  }}
+  className="w-full bg-green-600 hover:bg-green-700 mt-10 text-white text-lg py-3 rounded-none"
+>
+  Next
+</button>
+
         </div>
       </div>
-    </div>
+    
   );
 }

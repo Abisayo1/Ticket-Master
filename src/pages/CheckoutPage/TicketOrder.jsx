@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { ref, get } from "firebase/database";
 import { db } from "../../firebase"; // Adjust path as needed
 
-export default function TicketOrder() {
+export default function TicketOrder({ insuranceSelected }) {
   const [data, setData] = useState({
     ticketQuantity: 0,
     price: 0,
@@ -39,7 +39,7 @@ export default function TicketOrder() {
 
   const subtotal = ticketQuantity * price;
   const totalFees = ticketQuantity * fees;
-  const totalInsurance = ticketQuantity * insuranceFee;
+  const totalInsurance = insuranceSelected ? ticketQuantity * insuranceFee : 0;
   const total = subtotal + totalFees + totalInsurance + processingFee;
 
   return (
@@ -66,10 +66,12 @@ export default function TicketOrder() {
           <span>Order Processing Fee</span>
           <span>${processingFee.toFixed(2)}</span>
         </div>
-        <div className="flex justify-between text-sm text-gray-500">
-          <span>Insurance Fee: ${insuranceFee.toFixed(2)} x {ticketQuantity}</span>
-          <span>${totalInsurance.toFixed(2)}</span>
-        </div>
+        {insuranceSelected && (
+          <div className="flex justify-between text-sm text-gray-500">
+            <span>Insurance Fee: ${insuranceFee.toFixed(2)} x {ticketQuantity}</span>
+            <span>${totalInsurance.toFixed(2)}</span>
+          </div>
+        )}
       </div>
 
       <a href="#" className="text-sm text-blue-600 underline mb-2 inline-block">Cancel Order</a>

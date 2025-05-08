@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { ref, get } from "firebase/database";
-import { db } from "../../firebase"; // Adjust this if firebase.js is elsewhere
+import { db } from "../../firebase";
 
-export default function TicketInsurance() {
+export default function DesktopTicketInsurance({ onInsuranceChange }) {
   const [data, setData] = useState({
     ticketQuantity: 0,
     insuranceFee: 0,
@@ -13,6 +13,8 @@ export default function TicketInsurance() {
     byClick: "",
     population: 0,
   });
+
+  const [selected, setSelected] = useState(null); // null | true | false
 
   useEffect(() => {
     const fetchData = async () => {
@@ -55,6 +57,11 @@ export default function TicketInsurance() {
   const totalInsurance = ticketQuantity * insuranceFee;
   const totalCost = (price + fees + insuranceFee) * ticketQuantity;
 
+  const handleSelect = (value) => {
+    setSelected(value);
+    onInsuranceChange?.(value); // notify parent if function exists
+  };
+
   return (
     <div className="max-w-xl mb-4 mx-28 hidden sm:block bg-white p-6 rounded-2xl shadow-md mt-5 border border-gray-200 space-y-4">
       <h2 className="text-lg font-bold text-gray-900 flex items-center justify-between">
@@ -90,9 +97,20 @@ export default function TicketInsurance() {
       </p>
 
       <div className="space-y-3">
-        <div className="border border-purple-600 rounded-xl p-3 flex items-start space-x-3 bg-purple-50">
-          <input type="radio" name="insurance" id="yes" className="mt-1" />
-          <label htmlFor="yes" className="text-sm text-gray-800">
+        <div
+          className={`border ${
+            selected === true ? "border-purple-600 bg-purple-50" : "border-gray-300"
+          } rounded-xl p-3 flex items-start space-x-3`}
+        >
+          <input
+            type="radio"
+            name="insurance"
+            id="yes"
+            className="mt-1"
+            checked={selected === true}
+            onChange={() => handleSelect(true)}
+          />
+          <label htmlFor="yes" className="text-sm text-gray-800 cursor-pointer">
             <span className="block text-xs text-white bg-purple-600 px-2 py-0.5 rounded mb-1 inline-block">
               HIGHLY RECOMMENDED
             </span>
@@ -100,9 +118,20 @@ export default function TicketInsurance() {
           </label>
         </div>
 
-        <div className="border border-gray-300 rounded-xl p-3 flex items-start space-x-3">
-          <input type="radio" name="insurance" id="no" className="mt-1" />
-          <label htmlFor="no" className="text-sm text-gray-800">
+        <div
+          className={`border ${
+            selected === false ? "border-purple-600 bg-purple-50" : "border-gray-300"
+          } rounded-xl p-3 flex items-start space-x-3`}
+        >
+          <input
+            type="radio"
+            name="insurance"
+            id="no"
+            className="mt-1"
+            checked={selected === false}
+            onChange={() => handleSelect(false)}
+          />
+          <label htmlFor="no" className="text-sm text-gray-800 cursor-pointer">
             No, do not protect my resale ticket purchase. I understand this decision may put my{" "}
             <strong>${totalCost.toFixed(2)}</strong> purchase at risk.
           </label>
