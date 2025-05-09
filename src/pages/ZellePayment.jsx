@@ -4,7 +4,7 @@ import { ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage
 import { db, storage } from "../firebase";
 import { useNavigate } from "react-router-dom";
 import { PencilSquareIcon, XMarkIcon } from '@heroicons/react/24/solid';
-
+import { Copy } from 'lucide-react';
 
 export default function ZellePayment() {
   const [receiptFile, setReceiptFile] = useState(null);
@@ -106,33 +106,31 @@ export default function ZellePayment() {
     <div className="flex flex-col items-center bg-gray-50 p-4 min-h-screen">
       {/* Main card */}
       <div className="bg-white p-6 rounded-2xl shadow-lg w-full max-w-md mb-4">
-        <div className="border-b pb-4 mb-4">
-          <h2 className="text-sm font-semibold text-gray-500">{bankLabel}</h2>
-          <p className="text-lg font-semibold text-gray-800">{bankName}</p>
-  
-          <h2 className="mt-4 text-sm font-semibold text-gray-500">{bankNumberLabel}</h2>
-          <div className="flex justify-between items-center">
-            <p className="text-lg text-gray-800">{bankNumber}</p>
-            <button
-              className="text-gray-400 hover:text-gray-600"
-              onClick={() => copyToClipboard(bankNumber)}
-            >
-              📋
-            </button>
-          </div>
-  
-          <h2 className="mt-4 text-sm font-semibold text-gray-500">AMOUNT</h2>
-          <div className="flex justify-between items-center">
-            <p className="text-lg text-gray-800">${amount}</p>
-            <button
-              className="text-gray-400 hover:text-gray-600"
-              onClick={() => copyToClipboard(`$${amount}`)}
-            >
-              📋
-            </button>
-          </div>
-  
-          <p className="mt-4 text-sm text-gray-500 text-center">
+  <div className="border-b pb-4 mb-4">
+    <h2 className="text-sm font-semibold text-gray-500">{bankLabel}</h2>
+    <p className="text-lg font-semibold text-gray-800">{bankName}</p>
+
+    <h2 className="mt-4 text-sm font-semibold text-gray-500">{bankNumberLabel}</h2>
+    <div className="flex justify-between items-center">
+      <p className="text-lg text-gray-800">{bankNumber}</p>
+      <button
+        className="text-gray-400 hover:text-gray-600"
+        onClick={() => copyToClipboard(bankNumber)}
+      >
+        <Copy className="w-5 h-5" />
+      </button>
+    </div>
+
+    <h2 className="mt-4 text-sm font-semibold text-gray-500">AMOUNT</h2>
+    <div className="flex justify-between items-center">
+      <p className="text-lg text-gray-800">${amount}</p>
+      <button
+        className="text-gray-400 hover:text-gray-600"
+        onClick={() => copyToClipboard(`$${amount}`)}
+      >
+        <Copy className="w-5 h-5" />
+      </button>
+    </div>        <p className="mt-4 text-sm text-gray-500 text-center">
             This account is for this transaction only and
             <br />
             expires in <span className="text-green-600">{formatTime(timeLeft)}</span>

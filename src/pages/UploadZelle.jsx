@@ -47,7 +47,7 @@ export default function UploadZelle() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-6 bg-white rounded-2xl shadow-md mt-10">
+    <div className="max-w-2xl mx-auto overflow-hidden p-6 bg-white rounded-2xl shadow-md mt-10">
       <h2 className="text-2xl font-semibold mb-6 text-center">Upload Content</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         {['Bank ', 'BankName', 'BankNo', 'Number'].map((field) => (
