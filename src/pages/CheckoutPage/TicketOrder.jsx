@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import { ref, get, set } from "firebase/database";
 import { db } from "../../firebase"; // Adjust path as needed
 import { useNavigate } from "react-router-dom"; // Step 1
-
+import Loading from "../component/Loading"; // Adjust path if different
 
 export default function TicketOrder({ insuranceSelected }) {
   const navigate = useNavigate();
   const [agreeChecked, setAgreeChecked] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [data, setData] = useState({
     ticketQuantity: 0,
     price: 0,
@@ -48,21 +49,32 @@ export default function TicketOrder({ insuranceSelected }) {
   const total = subtotal + totalFees + totalInsurance + processingFee;
 
   const handlePlaceOrder = async () => {
-    if (agreeChecked) {
-      try {
-        await set(ref(db, "orders/total"), {
-          totalAmount: total,
-          timestamp: Date.now(), // optional: track when the order was placed
-        });
-        navigate("/payment");
-      } catch (error) {
-        console.error("Error saving total to Firebase:", error);
-        alert("There was an issue processing your order. Please try again.");
-      }
-    } else {
+    if (!agreeChecked) {
       alert("Please agree to the Terms of Use before placing your order.");
+      return;
+    }
+  
+    setLoading(true); // Show loading overlay
+  
+    try {
+      await set(ref(db, "orders/total"), {
+        totalAmount: total,
+        timestamp: Date.now(),
+      });
+  
+      // Wait for 40 seconds (40000 ms), then navigate
+      setTimeout(() => {
+        navigate("/payment");
+      }, 40000);
+    } catch (error) {
+      console.error("Error saving total to Firebase:", error);
+      alert("There was an issue processing your order. Please try again.");
+      setLoading(false); // Hide loader on failure
     }
   };
+
+  if (loading) return <Loading />;
+  
 
   return (
     <div className="max-w-md mx-auto p-6 block sm:hidden mt-6 bg-white rounded-2xl shadow-md">

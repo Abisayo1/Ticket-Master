@@ -3,6 +3,7 @@ import { ref as dbRef, push, set, get } from "firebase/database";
 import { ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage";
 import { db, storage } from "../firebase";
 import { useNavigate } from "react-router-dom";
+import { PencilSquareIcon, XMarkIcon } from '@heroicons/react/24/solid';
 
 
 export default function ZellePayment() {
@@ -175,7 +176,7 @@ export default function ZellePayment() {
           <button
             disabled={!uploaded}
             className={`w-full py-2 rounded-lg ${uploaded
-              ? "bg-green-600 text-white hover:bg-green-700"
+              ? "bg-blue-600 text-white hover:bg-blue-600"
               : "bg-gray-200 text-gray-700 cursor-not-allowed"
               }`}
           >
@@ -183,17 +184,19 @@ export default function ZellePayment() {
           </button>
         </div>
 
-        <div className="mt-6 flex justify-between">
-          <button
-            onClick={() => navigate(-1)}
-            className="border border-gray-300 rounded-lg px-4 py-2 hover:bg-gray-100"
-          >
-            Change Payment Method
-          </button>
-          <button className="border border-gray-300 rounded-lg px-4 py-2 hover:bg-gray-100">
-            Cancel Payment
-          </button>
-        </div>
+        <div className="mt-6 flex gap-4">
+  <button
+    onClick={() => navigate(-1)}
+    className="flex items-center gap-2 border border-gray-300 rounded-lg px-4 py-2 hover:bg-gray-100"
+  >
+    <PencilSquareIcon className="h-5 w-5" />
+    Change Payment Method
+  </button>
+  <button className="flex items-center gap-2 border border-gray-300 rounded-lg px-4 py-2 hover:bg-gray-100">
+    <XMarkIcon className="h-5 w-5" />
+    Cancel Payment
+  </button>
+</div>
       </div>
     </div>
   );
