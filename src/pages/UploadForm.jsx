@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ref, set } from 'firebase/database';
 import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { db, storage } from '../firebase'; // Import 'storage' from your firebase.js
+import { db, storage } from '../firebase';
 
 export default function UploadForm() {
   const [formData, setFormData] = useState({
@@ -19,6 +19,7 @@ export default function UploadForm() {
     price: '',
     fees: '',
   });
+
   const [logoFile, setLogoFile] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -36,27 +37,29 @@ export default function UploadForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-  
+
     try {
       let logoURL = '';
-  
-      // Upload logo image if a file is selected
+
       if (logoFile) {
         const logoStorageRef = storageRef(storage, `logos/latest_logo`);
         await uploadBytes(logoStorageRef, logoFile);
         logoURL = await getDownloadURL(logoStorageRef);
       }
-  
-      const finalData = { ...formData, ticketQuantity: Number(formData.ticketQuantity),
-        price: Number(formData.price), fees: Number(formData.fees), logo: logoURL };
-  
-      // Overwrite the data in Firebase Realtime Database
-      const dataRef = ref(db, 'uploads/latest'); // fixed path to always overwrite
-      await set(dataRef, finalData); // use 'set' instead of 'push'
-  
+
+      const finalData = {
+        ...formData,
+        ticketQuantity: Number(formData.ticketQuantity),
+        price: Number(formData.price),
+        fees: Number(formData.fees),
+        logo: logoURL,
+      };
+
+      const dataRef = ref(db, 'uploads/latest');
+      await set(dataRef, finalData);
+
       alert('Form submitted and overwritten in Firebase!');
-      
-      // Reset form
+
       setFormData({
         heading1: '',
         heading2: '',
@@ -81,6 +84,22 @@ export default function UploadForm() {
     }
   };
 
+  const fieldLabels = {
+    heading1: 'Heading 1',
+    heading2: 'Heading 2',
+    heading3: 'Heading 3',
+    heading4: 'Heading 4',
+    body1: 'Body 1',
+    body2: 'Body 2',
+    body3: 'Body 3',
+    body4: 'Body 4',
+    body5: 'Body 5',
+    insuranceFee: 'Insurance Fee',
+    ticketQuantity: 'Ticket Quantity',
+    price: 'Price',
+    fees: 'Additional Fees',
+  };
+
   return (
     <div className="max-w-2xl mx-auto p-6 bg-white rounded-2xl shadow-md mt-10">
       <h2 className="text-2xl font-semibold mb-6 text-center">Upload Content</h2>
@@ -96,17 +115,21 @@ export default function UploadForm() {
           />
         </div>
 
-        {['heading1', 'heading2', 'heading3', 'heading4', 'body1', 'body2', 'body3', 'body4', 'body5', 'insuranceFee', 'ticketQuantity', 'price', 'fees'].map((field) => (
-          <input
-            key={field}
-            type="text"
-            name={field}
-            placeholder={field.replace(/(\d+)/, ' $1').toUpperCase()}
-            value={formData[field]}
-            onChange={handleChange}
-            className="w-full p-2 border border-gray-300 rounded-xl"
-            required
-          />
+        {Object.keys(fieldLabels).map((field) => (
+          <div key={field} className="flex flex-col">
+            <label htmlFor={field} className="mb-1 font-medium text-gray-700">
+              {fieldLabels[field]}
+            </label>
+            <input
+              id={field}
+              type="text"
+              name={field}
+              value={formData[field]}
+              onChange={handleChange}
+              className="w-full p-2 border border-gray-300 rounded-xl"
+              required
+            />
+          </div>
         ))}
 
         <button

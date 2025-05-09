@@ -107,10 +107,10 @@ export default function ZellePayment() {
       {/* Main card */}
       <div className="bg-white p-6 rounded-2xl shadow-lg w-full max-w-md mb-4">
   <div className="border-b pb-4 mb-4">
-    <h2 className="text-sm font-semibold text-gray-500">{bankLabel}</h2>
-    <p className="text-lg font-semibold text-gray-800">{bankName}</p>
+    <h2 className="text-lg font-semibold text-gray-800">{bankLabel}</h2>
+    <p className="text-lg text-gray-800">{bankName}</p>
 
-    <h2 className="mt-4 text-sm font-semibold text-gray-500">{bankNumberLabel}</h2>
+    <h2 className="mt-4 text-lg font-semibold text-gray-800">{bankNumberLabel}</h2>
     <div className="flex justify-between items-center">
       <p className="text-lg text-gray-800">{bankNumber}</p>
       <button
@@ -121,7 +121,7 @@ export default function ZellePayment() {
       </button>
     </div>
 
-    <h2 className="mt-4 text-sm font-semibold text-gray-500">AMOUNT</h2>
+    <h2 className="mt-4 text-lg font-semibold text-gray-800">AMOUNT</h2>
     <div className="flex justify-between items-center">
       <p className="text-lg text-gray-800">${amount}</p>
       <button

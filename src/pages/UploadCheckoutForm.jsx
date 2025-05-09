@@ -50,27 +50,38 @@ export default function UploadCheckoutForm() {
     <div className="max-w-2xl mx-auto p-6 bg-white rounded-2xl shadow-md mt-10">
       <h2 className="text-2xl font-semibold mb-6 text-center">Upload Content</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
-        {['eventtype', 'soldby', 'byclick', 'population', 'processingFee'].map((field) => (
-          <input
-            key={field}
-            type="text"
-            name={field}
-            placeholder={field.toUpperCase()}
-            value={formData[field]}
-            onChange={handleChange}
-            className="w-full p-2 border border-gray-300 rounded-xl"
-            required
-          />
-        ))}
+  {[
+    { name: 'eventtype', label: 'Type of Event' },
+    { name: 'soldby', label: 'Sold By' },
+    { name: 'byclick', label: 'By Click (Yes/No)' },
+    { name: 'population', label: 'Target Population' },
+    { name: 'processingFee', label: 'Processing Fee' },
+  ].map(({ name, label }) => (
+    <div key={name} className="flex flex-col">
+      <label htmlFor={name} className="mb-1 font-medium text-gray-700">
+        {label}
+      </label>
+      <input
+        id={name}
+        type="text"
+        name={name}
+        value={formData[name]}
+        onChange={handleChange}
+        className="w-full p-2 border border-gray-300 rounded-xl"
+        required
+      />
+    </div>
+  ))}
 
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className="w-full bg-blue-600 text-white py-2 rounded-xl hover:bg-blue-700 transition duration-200"
-        >
-          {isSubmitting ? 'Submitting...' : 'Submit'}
-        </button>
-      </form>
+  <button
+    type="submit"
+    disabled={isSubmitting}
+    className="w-full bg-blue-600 text-white py-2 rounded-xl hover:bg-blue-700 transition duration-200"
+  >
+    {isSubmitting ? 'Submitting...' : 'Submit'}
+  </button>
+</form>
+
     </div>
   );
 }
