@@ -5,6 +5,8 @@ import Home from './pages/Home';
 import SplashScreen from './pages/component/SplashScreen';
 import Checkout from './pages/CheckoutPage/Checkout';
 import UploadCheckoutForm from './pages/UploadCheckoutForm';
+import PaymentPage from './pages/PaymentPage';
+import UploadZelle from './pages/UploadZelle';
 function App() {
   return (
     <BrowserRouter>
@@ -15,6 +17,8 @@ function App() {
         <Route path = '/checkout' element = {<Checkout />}/>
         <Route path = '/home' element = {<Home />}/>
         <Route path = '/splashscreen' element = {<SplashScreen />}/>
+        <Route path = '/payment' element = {<PaymentPage />}/>
+        <Route path = '/zelleupload' element = {<UploadZelle />}/>
       </Routes>
     </BrowserRouter>
   );

@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { ref, get } from "firebase/database";
+import { ref, get, set } from "firebase/database";
 import { db } from "../../firebase"; // Adjust path as needed
+import { useNavigate } from "react-router-dom"; // Step 1
+
 
 export default function TicketOrder({ insuranceSelected }) {
+  const navigate = useNavigate();
+  const [agreeChecked, setAgreeChecked] = useState(false);
   const [data, setData] = useState({
     ticketQuantity: 0,
     price: 0,
@@ -37,10 +41,28 @@ export default function TicketOrder({ insuranceSelected }) {
 
   const { ticketQuantity, price, fees, insuranceFee, processingFee } = data;
 
+
   const subtotal = ticketQuantity * price;
   const totalFees = ticketQuantity * fees;
   const totalInsurance = insuranceSelected ? ticketQuantity * insuranceFee : 0;
   const total = subtotal + totalFees + totalInsurance + processingFee;
+
+  const handlePlaceOrder = async () => {
+    if (agreeChecked) {
+      try {
+        await set(ref(db, "orders/total"), {
+          totalAmount: total,
+          timestamp: Date.now(), // optional: track when the order was placed
+        });
+        navigate("/payment");
+      } catch (error) {
+        console.error("Error saving total to Firebase:", error);
+        alert("There was an issue processing your order. Please try again.");
+      }
+    } else {
+      alert("Please agree to the Terms of Use before placing your order.");
+    }
+  };
 
   return (
     <div className="max-w-md mx-auto p-6 block sm:hidden mt-6 bg-white rounded-2xl shadow-md">
@@ -79,13 +101,24 @@ export default function TicketOrder({ insuranceSelected }) {
       <p className="text-xs text-gray-600 mb-1">*All Sales Final - No Refunds or Exchanges</p>
 
       <div className="flex items-center mb-4">
-        <input type="checkbox" id="agree" className="mr-2" />
+        <input
+          type="checkbox"
+          id="agree"
+          className="mr-2"
+          checked={agreeChecked}
+          onChange={(e) => setAgreeChecked(e.target.checked)} // 🔵 Handle checkbox
+        />
         <label htmlFor="agree" className="text-sm">
-          I have read and agree to the current <a href="#" className="text-blue-600 underline">Terms of Use</a>.
+          I have read and agree to the current{" "}
+          <a href="#" className="text-blue-600 underline">Terms of Use</a>.
         </label>
       </div>
 
-      <button className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-xl">
+      <button
+        onClick={handlePlaceOrder}
+        className={`w-full font-semibold py-2 px-4 rounded-xl 
+          ${agreeChecked ? 'bg-green-600 hover:bg-green-700 text-white' : 'bg-gray-300 text-gray-500 cursor-not-allowed'}`}
+      >
         Place Order
       </button>
 
