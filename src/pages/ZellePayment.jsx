@@ -103,12 +103,13 @@ export default function ZellePayment() {
   };
 
   return (
-    <div className="flex justify-center items-center bg-gray-50 p-4">
-      <div className="bg-white p-6 rounded-2xl shadow-lg w-full max-w-md">
+    <div className="flex flex-col items-center bg-gray-50 p-4 min-h-screen">
+      {/* Main card */}
+      <div className="bg-white p-6 rounded-2xl shadow-lg w-full max-w-md mb-4">
         <div className="border-b pb-4 mb-4">
           <h2 className="text-sm font-semibold text-gray-500">{bankLabel}</h2>
           <p className="text-lg font-semibold text-gray-800">{bankName}</p>
-
+  
           <h2 className="mt-4 text-sm font-semibold text-gray-500">{bankNumberLabel}</h2>
           <div className="flex justify-between items-center">
             <p className="text-lg text-gray-800">{bankNumber}</p>
@@ -119,7 +120,7 @@ export default function ZellePayment() {
               📋
             </button>
           </div>
-
+  
           <h2 className="mt-4 text-sm font-semibold text-gray-500">AMOUNT</h2>
           <div className="flex justify-between items-center">
             <p className="text-lg text-gray-800">${amount}</p>
@@ -130,14 +131,14 @@ export default function ZellePayment() {
               📋
             </button>
           </div>
-
+  
           <p className="mt-4 text-sm text-gray-500 text-center">
             This account is for this transaction only and
             <br />
             expires in <span className="text-green-600">{formatTime(timeLeft)}</span>
           </p>
         </div>
-
+  
         <div className="space-y-4">
           <div className="flex items-center border border-gray-300 rounded-lg py-2 px-3 justify-between hover:bg-gray-100">
             <button
@@ -172,32 +173,34 @@ export default function ZellePayment() {
               </svg>
             </label>
           </div>
-
+  
           <button
             disabled={!uploaded}
-            className={`w-full py-2 rounded-lg ${uploaded
-              ? "bg-blue-600 text-white hover:bg-blue-600"
-              : "bg-gray-200 text-gray-700 cursor-not-allowed"
-              }`}
+            className={`w-full py-2 rounded-lg ${
+              uploaded
+                ? "bg-blue-600 text-white hover:bg-blue-600"
+                : "bg-gray-200 text-gray-700 cursor-not-allowed"
+            }`}
           >
             I've sent the money
           </button>
         </div>
-
-        <div className="mt-6 flex gap-4">
-  <button
-    onClick={() => navigate(-1)}
-    className="flex items-center gap-2 border border-gray-300 rounded-lg px-4 py-2 hover:bg-gray-100"
-  >
-    <PencilSquareIcon className="h-5 w-5" />
-    Change Payment Method
-  </button>
-  <button className="flex items-center gap-2 border border-gray-300 rounded-lg px-4 py-2 hover:bg-gray-100">
-    <XMarkIcon className="h-5 w-5" />
-    Cancel Payment
-  </button>
-</div>
+      </div>
+  
+      {/* Buttons outside the card */}
+      <div className="flex gap-4 mt-8 w-full max-w-md">
+        <button
+          onClick={() => navigate(-1)}
+          className="flex items-center justify-center gap-2 border border-gray-300 rounded-lg px-4 py-2 flex-1 hover:bg-gray-100"
+        >
+          <PencilSquareIcon className="h-5 w-5" />
+          Change Payment Method
+        </button>
+        <button className="flex items-center justify-center gap-2 border border-gray-300 rounded-lg px-4 py-2 flex-1 hover:bg-gray-100">
+          <XMarkIcon className="h-5 w-5" />
+          Cancel Payment
+        </button>
       </div>
     </div>
   );
-}
+  }
