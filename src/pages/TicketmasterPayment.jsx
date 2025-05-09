@@ -44,7 +44,7 @@ export default function TicketmasterPayment() {
             <div className="p-6 flex justify-between items-center">
                 <div className="z-10">
                     {!showStickyT && (
-                        <p className="text-sm font-semibold">
+                        <p className="text-sm italic font-semibold">
                             ticketmaster<sup>®</sup>
                         </p>
                     )}
