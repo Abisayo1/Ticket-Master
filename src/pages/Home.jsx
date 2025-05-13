@@ -122,7 +122,7 @@ export default function Home() {
 
       <h2 className="text-xl font-semibold mb-2">Enter Access Code</h2>
       <p className="text-gray-600 text-sm mb-4 text-center max-w-md">
-        To access this resale ticket, you will need the 4-digit code sent to the verified seller.
+       To gain access a verified resale code would be required from the seller.
       </p>
       <input
         type="password"
