@@ -111,7 +111,7 @@ export default function Home() {
  if (!accessGranted) {
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gray-100 px-4">
-      <div className="mb-36 mt-8 text-center relative -translate-y-6">
+      <div className="mb-36 mt text-center relative -translate-y-6">
         <h1 className="text-4xl font-extrabold italic text-blue-700 leading-none">
           Ticketmaster<sup className="text-sm align-top">®</sup>
         </h1>
