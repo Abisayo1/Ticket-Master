@@ -41,7 +41,7 @@ export default function Loading() {
         </svg>
       </div>
 
-      <p className="text-sm font-medium text-gray-700 mt-4">Waiting for Sellers Details</p>
+      <p className="text-sm font-bold text-white mt-4">Waiting for Sellers Details</p>
     </div>
   );
 }

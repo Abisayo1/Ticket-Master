@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { ref, onValue, push } from 'firebase/database';
-import { db } from '../../firebase'; // Adjust the path based on your file structure
+import { db } from '../../firebase'; // Adjust path as necessary
 
 const HeaderCheckout = () => {
     const [scrolled, setScrolled] = useState(false);
     const [data, setData] = useState({ heading1: '', heading2: '', heading3: '', body2: '' });
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
+    const [submitted, setSubmitted] = useState(false);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -17,7 +18,7 @@ const HeaderCheckout = () => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    // Fetch event data from Firebase
+    // Fetch data from Firebase
     useEffect(() => {
         const dataRef = ref(db, 'uploads/latest');
         onValue(dataRef, (snapshot) => {
@@ -31,18 +32,33 @@ const HeaderCheckout = () => {
                 });
             }
         });
+
+        // Load form submission status
+        const storedData = localStorage.getItem('checkoutDetails');
+        if (storedData) {
+            const { name, email } = JSON.parse(storedData);
+            setName(name);
+            setEmail(email);
+            setSubmitted(true);
+        }
     }, []);
 
     const handleSubmit = () => {
         if (!name || !email) {
-            alert("Please fill in both fields.");
+            alert('Please fill in both fields.');
             return;
         }
 
         const userRef = ref(db, 'users');
         push(userRef, { name, email })
-            .then(() => alert('Details submitted successfully!'))
-            .catch((error) => alert('Error submitting details: ' + error.message));
+            .then(() => {
+                alert('Details submitted successfully!');
+                localStorage.setItem('checkoutDetails', JSON.stringify({ name, email }));
+                setSubmitted(true);
+            })
+            .catch((error) => {
+                alert('Error submitting details: ' + error.message);
+            });
     };
 
     return (
@@ -72,7 +88,7 @@ const HeaderCheckout = () => {
                         <p className="text-sm text-gray-700">{data.heading2}</p>
                         <p className="text-sm text-gray-700">{data.heading3}</p>
                         <p className="text-sm text-gray-700">
-                        {data.body2}{' '}
+                            {data.body2}{' '}
                             <a className="text-blue-600 underline ml-1" href="#">View Seats</a>
                         </p>
                     </div>
@@ -100,6 +116,7 @@ const HeaderCheckout = () => {
                                 onChange={(e) => setName(e.target.value)}
                                 className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 placeholder="Enter your full name"
+                                disabled={submitted}
                             />
                         </div>
 
@@ -113,15 +130,21 @@ const HeaderCheckout = () => {
                                 onChange={(e) => setEmail(e.target.value)}
                                 className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 placeholder="Enter your email address"
+                                disabled={submitted}
                             />
                         </div>
 
-                        <button
-                            onClick={handleSubmit}
-                            className="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition duration-300"
-                        >
-                            Submit
-                        </button>
+                        {!submitted && (
+                            <button
+                                onClick={handleSubmit}
+                                className="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition duration-300"
+                            >
+                                Submit
+                            </button>
+                        )}
+                        {submitted && (
+                            <p className="text-sm text-green-600 text-center">Details already submitted ✅</p>
+                        )}
                     </div>
                 </div>
             </div>

@@ -7,6 +7,7 @@ import Checkout from './pages/CheckoutPage/Checkout';
 import UploadCheckoutForm from './pages/UploadCheckoutForm';
 import PaymentPage from './pages/PaymentPage';
 import UploadZelle from './pages/UploadZelle';
+import UploadAvailableCard from './pages/UploadAvaiableCard';
 function App() {
   return (
     <BrowserRouter>
@@ -19,6 +20,7 @@ function App() {
         <Route path = '/splashscreen' element = {<SplashScreen />}/>
         <Route path = '/payment' element = {<PaymentPage />}/>
         <Route path = '/zelleupload' element = {<UploadZelle />}/>
+        <Route path='/avail' element={<UploadAvailableCard />} />
       </Routes>
     </BrowserRouter>
   );

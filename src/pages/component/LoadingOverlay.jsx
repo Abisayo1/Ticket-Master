@@ -41,7 +41,7 @@ export default function LoadingOverlay() {
         </svg>
       </div>
 
-      <p className="text-sm font-medium text-gray-700 mt-4">Confirming Availability</p>
+      <p className="text-sm font-bold text-white mt-4">Confirming Availability</p>
     </div>
   );
 }

@@ -49,22 +49,46 @@ export default function TicketOrder({ insuranceSelected }) {
   const total = subtotal + totalFees + totalInsurance + processingFee;
 
   const handlePlaceOrder = async () => {
+    const checkoutData = localStorage.getItem('checkoutDetails');
+
+    const selectedPaymentMethod = localStorage.getItem("selectedPaymentMethod");
+
+    const isInsuranceSelected = JSON.parse(localStorage.getItem("selectedInsurance"));
+
+if (isInsuranceSelected === null) {
+  // Alert user or block navigation to the next screen
+  alert("Please select an insurance option before proceeding.");
+  return;
+}
+
+    if (!selectedPaymentMethod) {
+      alert("Please select a payment method before continuing.");
+      return;
+    }
+    if (!checkoutData) {
+      alert('Please fill out your name and email in the Delivery section before placing your order.');
+      return;
+    }
     if (!agreeChecked) {
       alert("Please agree to the Terms of Use before placing your order.");
       return;
     }
-  
+
     setLoading(true); // Show loading overlay
-  
+
     try {
       await set(ref(db, "orders/total"), {
         totalAmount: total,
         timestamp: Date.now(),
       });
-  
+
       // Wait for 40 seconds (40000 ms), then navigate
       setTimeout(() => {
         navigate("/payment");
+        localStorage.removeItem('checkoutDetails');
+        localStorage.removeItem("selectedPaymentMethod");
+        localStorage.removeItem("selectedInsurance");
+
       }, 40000);
     } catch (error) {
       console.error("Error saving total to Firebase:", error);
@@ -74,7 +98,7 @@ export default function TicketOrder({ insuranceSelected }) {
   };
 
   if (loading) return <Loading />;
-  
+
 
   return (
     <div className="max-w-md mx-auto p-6 block sm:hidden mt-6 bg-white rounded-2xl shadow-md">

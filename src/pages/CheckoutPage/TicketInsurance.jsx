@@ -43,6 +43,14 @@ export default function TicketInsurance({ onInsuranceChange }) {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    const savedSelection = JSON.parse(localStorage.getItem("selectedInsurance"));
+
+    if (savedSelection !== null) {
+      setSelected(savedSelection);
+    }
+  }, []);
+
   const {
     ticketQuantity,
     insuranceFee,
@@ -55,11 +63,16 @@ export default function TicketInsurance({ onInsuranceChange }) {
   } = data;
 
   const totalInsurance = ticketQuantity * insuranceFee;
-  const totalCost = (price + fees + insuranceFee) * ticketQuantity;
+  const totalCost = (price + fees) * ticketQuantity;
 
   const handleSelect = (value) => {
     setSelected(value);
     onInsuranceChange?.(value); // notify parent if function exists
+    localStorage.setItem("selectedInsurance", JSON.stringify(value)); // Save to localStorage
+
+    if (onInsuranceChange) {
+      onInsuranceChange(value); // notify parent if function exists
+    }
   };
 
   return (
@@ -98,9 +111,8 @@ export default function TicketInsurance({ onInsuranceChange }) {
 
       <div className="space-y-3">
         <div
-          className={`border ${
-            selected === true ? "border-purple-600 bg-purple-50" : "border-gray-300"
-          } rounded-xl p-3 flex items-start space-x-3`}
+          className={`border ${selected === true ? "border-purple-600 bg-purple-50" : "border-gray-300"
+            } rounded-xl p-3 flex items-start space-x-3`}
         >
           <input
             type="radio"
@@ -119,9 +131,8 @@ export default function TicketInsurance({ onInsuranceChange }) {
         </div>
 
         <div
-          className={`border ${
-            selected === false ? "border-purple-600 bg-purple-50" : "border-gray-300"
-          } rounded-xl p-3 flex items-start space-x-3`}
+          className={`border ${selected === false ? "border-purple-600 bg-purple-50" : "border-gray-300"
+            } rounded-xl p-3 flex items-start space-x-3`}
         >
           <input
             type="radio"

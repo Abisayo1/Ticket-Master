@@ -4,7 +4,6 @@ import HeaderDesktop from './HeaderDesktop';
 import ChSection1 from './ChSection1';
 import TicketInsurance from './TicketInsurance';
 import TicketOrder from './TicketOrder';
-import TicketOrderDesktop from './TicketOrderDesktop';
 import DesktopPayment from './DesktopPayment';
 import DesktopTicketInsurance from './DesktopTicketInsurance';
 import DesktopTicketOrder from './DesktopTicketOrder';
@@ -13,12 +12,16 @@ import Summary from './Summary'; // Assuming you forgot to import it
 
 const Checkout = () => {
   const [insuranceSelected, setInsuranceSelected] = useState(null); // <-- Add this line
+  const [userInfo, setUserInfo] = useState({ name: '', email: '' });
+
+  const isFormComplete = userInfo.name.trim() !== '' && userInfo.email.trim() !== '';
+
 
   return (
     <div>
       {/* Header Section */}
-      <HeaderCheckout />
-      <HeaderDesktop />
+      <HeaderCheckout userInfo={userInfo} setUserInfo={setUserInfo}/>
+      <HeaderDesktop userInfo={userInfo} setUserInfo={setUserInfo} />
 
       {/* Payment Section */}
       <ChSection1 />
@@ -32,7 +35,7 @@ const Checkout = () => {
       <Summary insuranceSelected={insuranceSelected} />
 
       {/* Ticket Order */}
-      <TicketOrder insuranceSelected={insuranceSelected} />
+      <TicketOrder formComplete={isFormComplete} insuranceSelected={insuranceSelected} />
       <DesktopTicketOrder insuranceSelected={insuranceSelected} />
       <ConcertTicket />
     </div>

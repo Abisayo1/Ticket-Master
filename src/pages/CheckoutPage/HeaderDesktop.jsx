@@ -22,9 +22,12 @@ export default function HeaderDesktop() {
         email,
         timestamp: Date.now(),
       });
+      localStorage.setItem('checkoutDetails', JSON.stringify({ name, email }));
       alert("Details saved successfully!");
+      
       setName("");
       setEmail("");
+
     } catch (err) {
       console.error("Error saving user data:", err);
       alert("Error saving data. Please try again.");
