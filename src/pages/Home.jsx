@@ -108,21 +108,21 @@ export default function Home() {
 
   if (checkingCode) return <div>Checking access...</div>;
 
-  if (!accessGranted) {
+ if (!accessGranted) {
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gray-100 px-4">
-      <div className="mb-6 text-center">
-        <h1 className="text-3xl font-bold italic text-blue-600">
-          Ticketmaster<sup>®</sup>
+      <div className="mb-36 mt-8 text-center relative -translate-y-6">
+        <h1 className="text-4xl font-extrabold italic text-blue-700 leading-none">
+          Ticketmaster<sup className="text-sm align-top">®</sup>
         </h1>
-        <p className="text-lg font-semibold italic text-blue-600">
-          Verified Resale Method
+        <p className="text-base font-extrabold italic text-blue-700 mt-1 ml-36">
+          Verified Resale method
         </p>
       </div>
 
       <h2 className="text-xl font-semibold mb-2">Enter Access Code</h2>
       <p className="text-gray-600 text-sm mb-4 text-center max-w-md">
-       To gain access a verified resale code would be required from the seller.
+        To access this resale ticket, you will need the 4-digit code sent to the verified seller.
       </p>
       <input
         type="password"
@@ -146,6 +146,8 @@ export default function Home() {
     </div>
   );
 }
+
+
 
 
   const { heading1, heading2, heading3, heading4, body1, body2, body3, body4, body5 } = content;
