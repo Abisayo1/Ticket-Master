@@ -140,7 +140,10 @@ const [checkingCode, setCheckingCode] = useState(true);
   if (!accessGranted) {
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gray-100 px-4">
-      <h2 className="text-xl font-semibold mb-4">Enter Access Code</h2>
+      <h2 className="text-xl font-semibold mb-2">Enter Access Code</h2>
+      <p className="text-gray-600 text-sm mb-4 text-center max-w-md">
+        To access this resale ticket, you will need the 4-digit code sent to the verified seller.
+      </p>
       <input
         type="password"
         value={userCode}
@@ -163,6 +166,7 @@ const [checkingCode, setCheckingCode] = useState(true);
     </div>
   );
 }
+
 
   return (
     <div className="min-h-screen bg-gray-100">
