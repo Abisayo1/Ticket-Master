@@ -40,11 +40,10 @@ export default function ZellePayment() {
     return () => clearInterval(timer);
   }, []);
 
-  // Navigate when timer expires
   useEffect(() => {
     if (timeLeft === 0) {
       alert("This payment session has expired.");
-      navigate(-1); // or use navigate("/some-page") for a specific route
+      navigate(-1);
     }
   }, [timeLeft, navigate]);
 
@@ -124,6 +123,8 @@ export default function ZellePayment() {
     return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
   };
 
+  const isFormValid = receiptFile && payerName.trim();
+
   return (
     <div className="flex flex-col items-center bg-gray-50 p-4">
       <div className="bg-white p-6 rounded-2xl shadow-lg w-full max-w-md mb-4">
@@ -180,7 +181,7 @@ export default function ZellePayment() {
             onChange={(e) => setPayerName(e.target.value)}
             placeholder="Enter name of person paying"
             className="w-full border border-gray-300 rounded-lg px-4 py-2"
-            disabled={!receiptFile || loading}
+            disabled={loading}
           />
 
           <div className="flex items-center border border-gray-300 rounded-lg py-2 px-3 justify-between hover:bg-gray-100">
@@ -216,9 +217,9 @@ export default function ZellePayment() {
 
           <button
             onClick={handleSubmitPayment}
-            disabled={!receiptFile || loading}
+            disabled={!isFormValid || loading}
             className={`w-full py-2 rounded-lg ${
-              receiptFile && !loading
+              isFormValid && !loading
                 ? "bg-blue-600 text-white hover:bg-blue-700"
                 : "bg-gray-200 text-gray-700 cursor-not-allowed"
             }`}
