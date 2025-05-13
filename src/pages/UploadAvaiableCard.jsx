@@ -27,18 +27,21 @@ export default function UploadAvailableCard() {
     }));
   };
 
-  const handleSubmit = async () => {
+ const handleSubmit = async () => {
   try {
-    await Promise.all(
-      Object.keys(selectedCards).map((card) => {
-        if (selectedCards[card].selected) {
-          return set(ref(db, `payment_cards/${card}`), {
-            description: selectedCards[card].description,
-          });
-        }
-        return Promise.resolve(); // skip unselected
-      })
-    );
+    const selectedData = {};
+
+    // Prepare only selected cards
+    Object.keys(selectedCards).forEach((card) => {
+      if (selectedCards[card].selected) {
+        selectedData[card] = {
+          description: selectedCards[card].description,
+        };
+      }
+    });
+
+    // Overwrite the entire 'payment_cards' node
+    await set(ref(db, "payment_cards"), selectedData);
 
     alert("Payment methods uploaded successfully!");
   } catch (error) {
@@ -46,6 +49,7 @@ export default function UploadAvailableCard() {
     alert("Error uploading payment methods.");
   }
 };
+
 
 
   return (
