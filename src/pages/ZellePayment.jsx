@@ -22,7 +22,7 @@ export default function ZellePayment() {
   const [paymentMethod, setPaymentMethod] = useState("");
   const [paymentDescription, setPaymentDescription] = useState("");
 
-  const [loading, setLoading] = useState(false); // 👈 New loading state
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -39,6 +39,14 @@ export default function ZellePayment() {
     }, 1000);
     return () => clearInterval(timer);
   }, []);
+
+  // Navigate when timer expires
+  useEffect(() => {
+    if (timeLeft === 0) {
+      alert("This payment session has expired.");
+      navigate(-1); // or use navigate("/some-page") for a specific route
+    }
+  }, [timeLeft, navigate]);
 
   // Fetch payment details
   useEffect(() => {
@@ -79,7 +87,7 @@ export default function ZellePayment() {
       return;
     }
 
-    setLoading(true); // 👈 Start loading
+    setLoading(true);
 
     try {
       const imageRef = storageRef(storage, `receipts/${Date.now()}_${receiptFile.name}`);
@@ -95,7 +103,6 @@ export default function ZellePayment() {
       });
 
       alert("Payment submitted successfully!");
-      // Optionally reset
       setReceiptFile(null);
       setReceiptName("");
       setPayerName("");
@@ -103,7 +110,7 @@ export default function ZellePayment() {
       console.error("Submission error:", error);
       alert("Failed to submit payment.");
     } finally {
-      setLoading(false); // 👈 End loading
+      setLoading(false);
     }
   };
 
@@ -118,7 +125,7 @@ export default function ZellePayment() {
   };
 
   return (
-    <div className="flex flex-col items-center bg-gray-50 p-4 min-h-screen">
+    <div className="flex flex-col items-center bg-gray-50 p-4">
       <div className="bg-white p-6 rounded-2xl shadow-lg w-full max-w-md mb-4">
         <div className="border-b pb-4 mb-4">
           <h2 className="text-lg font-semibold text-gray-800">{bankLabel}</h2>
@@ -156,7 +163,6 @@ export default function ZellePayment() {
           </p>
         </div>
 
-        {/* 🔄 Loading Message */}
         {loading && (
           <div className="flex items-center justify-center my-2 text-blue-600">
             <svg className="animate-spin h-5 w-5 mr-2 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
