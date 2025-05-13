@@ -13,8 +13,32 @@ export default function Home() {
   const [logoUrl, setLogoUrl] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
+  const [accessGranted, setAccessGranted] = useState(false);
+const [userCode, setUserCode] = useState('');
+const [storedCode, setStoredCode] = useState('');
+const [checkingCode, setCheckingCode] = useState(true);
+
 
   const [showSplash, setShowSplash] = useState(true);
+
+  useEffect(() => {
+  const fetchAccessCode = async () => {
+    try {
+      const codeRef = ref(db, 'codes/code');
+      const snapshot = await get(codeRef);
+      if (snapshot.exists()) {
+        setStoredCode(snapshot.val());
+      }
+    } catch (error) {
+      console.error('Error fetching access code:', error);
+    } finally {
+      setCheckingCode(false);
+    }
+  };
+
+  fetchAccessCode();
+}, []);
+
 
   useEffect(() => {
     const fetchLogo = async () => {
@@ -86,6 +110,10 @@ export default function Home() {
     fetchContent();
   }, []);
 
+  if (checkingCode) return <div>Checking access...</div>;
+
+
+
   if (!content) {
     return <div>Loading...</div>;
   }
@@ -109,7 +137,32 @@ export default function Home() {
     return <SplashScreen />;
   }
 
-  
+  if (!accessGranted) {
+  return (
+    <div className="flex flex-col items-center justify-center h-screen bg-gray-100 px-4">
+      <h2 className="text-xl font-semibold mb-4">Enter Access Code</h2>
+      <input
+        type="password"
+        value={userCode}
+        onChange={(e) => setUserCode(e.target.value)}
+        className="border border-gray-300 px-4 py-2 mb-4 rounded w-full max-w-sm"
+        placeholder="Access Code"
+      />
+      <button
+        onClick={() => {
+          if (userCode === storedCode) {
+            setAccessGranted(true);
+          } else {
+            alert('Invalid code. Please try again.');
+          }
+        }}
+        className="bg-blue-600 text-white px-4 py-2 rounded"
+      >
+        Submit
+      </button>
+    </div>
+  );
+}
 
   return (
     <div className="min-h-screen bg-gray-100">

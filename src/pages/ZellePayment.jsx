@@ -223,7 +223,7 @@ export default function ZellePayment() {
                 : "bg-gray-200 text-gray-700 cursor-not-allowed"
             }`}
           >
-            {loading ? "Submitting..." : "I've sent the money"}
+            {loading ? "Submitting..." : "Payment Completed"}
           </button>
         </div>
       </div>
