@@ -115,7 +115,7 @@ export default function Home() {
         <h1 className="text-4xl font-extrabold italic text-blue-700 leading-none">
           Ticketmaster<sup className="text-sm align-top">®</sup>
         </h1>
-        <p className="text-base font-extrabold italic text-blue-700 mt-1 ml-36">
+        <p className="text-sm font-extrabold italic text-blue-700 mt-1 ml-36">
           Verified Resale method
         </p>
       </div>
