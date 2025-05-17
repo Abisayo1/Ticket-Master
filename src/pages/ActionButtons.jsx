@@ -6,7 +6,7 @@ export default function ActionButtons() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowButtons(true);
-    }, 4000); // 4 seconds delay
+    }, 3000); // 4 seconds delay
 
     return () => clearTimeout(timer); // cleanup on unmount
   }, []);
