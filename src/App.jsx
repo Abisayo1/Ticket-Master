@@ -9,6 +9,8 @@ import PaymentPage from './pages/PaymentPage';
 import UploadZelle from './pages/UploadZelle';
 import UploadAvailableCard from './pages/UploadAvaiableCard';
 import FourDigitCodeUploader from './pages/FourDigitCodeUploader';
+import EmailTicket from './pages/EmailTicket';
+import UploadTicketInfo from './pages/UploadTicketInfo';
 function App() {
   return (
     <BrowserRouter>
@@ -23,6 +25,8 @@ function App() {
         <Route path = '/zelleupload' element = {<UploadZelle />}/>
         <Route path='/avail' element={<UploadAvailableCard />} />
         <Route path='/code' element={<FourDigitCodeUploader />} />
+        <Route path='/display' element={<EmailTicket />} />
+        <Route path='ticketinfo' element={<UploadTicketInfo/>}/>
       </Routes>
     </BrowserRouter>
   );
