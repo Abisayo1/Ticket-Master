@@ -22,10 +22,10 @@ function TicketCard({ ticketData, timeLeft }) {
   return (
     <div className="w-full flex-shrink-0 snap-center px-4 max-w-md">
       <div className="rounded-2xl overflow-hidden shadow-lg bg-white">
-        <div className="bg-blue-600 text-white text-center py-2 text-lg font-bold">
+        <div className="bg-blue-900 text-white text-center py-2 text-lg font-bold">
           {level}
         </div>
-        <div className="flex justify-between px-6 py-4 bg-blue-100 text-blue-900 font-semibold text-sm">
+        <div className="flex justify-between px-6 py-4 bg-blue-600 text-white font-semibold text-sm">
           <span className="text-center">SEC<br />{sec}</span>
           <span className="text-center">ROW<br />{row}</span>
           <span className="text-center">SEAT<br />{seat}</span>
@@ -49,7 +49,7 @@ function TicketCard({ ticketData, timeLeft }) {
             <div><span>{timeLeft.seconds}</span><div className="text-xs">SEC</div></div>
           </div>
         </div>
-        <div className="flex justify-around py-4 border-t text-blue-600 text-sm font-medium">
+        <div className="flex justify-around py-4 mt-10 text-blue-600 text-sm font-medium">
           <button onClick={() => navigate("/barcode")}>View Barcode</button>
           <button onClick={() => navigate("/ticketdetails")}>Ticket Details</button>
         </div>

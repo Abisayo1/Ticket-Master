@@ -48,7 +48,7 @@ export default function Home() {
       try {
         const storage = getStorage();
         const listRef = storageRef(storage, 'logos/');
-        const res = await listAll(listRef);z
+        const res = await listAll(listRef);
 
         if (res.items.length > 0) {
           const firstImageRef = res.items[0];
