@@ -4,11 +4,12 @@ import TicketHeader from './TicketHeader'
 import ActionButtons from './ActionButtons'
 
 const EmailTicket = () => {
+  
   return (
     <div>
         <TicketHeader/>
       <TicketDisplay/>
-      <ActionButtons/>
+      
     </div>
   )
 }

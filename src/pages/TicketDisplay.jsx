@@ -1,8 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { ref, get } from "firebase/database";
-import { db } from "../firebase"; // Make sure this path is correct
+import { db } from "../firebase"; // Ensure the path is correct
 import { useNavigate } from "react-router-dom";
-
 
 function TicketCard({ ticketData, timeLeft }) {
   if (!ticketData) return null;
@@ -17,12 +16,12 @@ function TicketCard({ ticketData, timeLeft }) {
     image,
   } = ticketData;
 
-   const navigate = useNavigate();
+  const navigate = useNavigate();
 
   return (
-    <div className="w-full flex-shrink-0 snap-center px-4 max-w-md">
+    <div className="w-full flex-shrink-0 snap-center px-4 max-w-lg">
       <div className="rounded-2xl overflow-hidden shadow-lg bg-white">
-        <div className="bg-blue-900 text-white text-center py-2 text-lg font-bold">
+        <div className="text-white text-center py-2 text-lg font-bold" style={{ backgroundColor: '#1c4ed5' }}>
           {level}
         </div>
         <div className="flex justify-between px-6 py-4 bg-blue-600 text-white font-semibold text-sm">
@@ -49,11 +48,11 @@ function TicketCard({ ticketData, timeLeft }) {
             <div><span>{timeLeft.seconds}</span><div className="text-xs">SEC</div></div>
           </div>
         </div>
-        <div className="flex justify-around py-4 mt-10 text-blue-600 text-sm font-medium">
+        <div className="flex justify-around py-4 mt-10 mr-10 ml-10 text-blue-600 text-sm font-medium" style={{ columnGap: '0px' }}>
           <button onClick={() => navigate("/barcode")}>View Barcode</button>
           <button onClick={() => navigate("/ticketdetails")}>Ticket Details</button>
         </div>
-        <div className="bg-blue-600 text-white text-center py-3 text-sm font-semibold">
+        <div className="text-white text-center py-3 text-sm font-semibold" style={{ backgroundColor: '#1c4ed5' }}>
           <div className="flex items-center justify-center space-x-0">
             <img src="/ticket.png" alt="Verified" className="w-4 h-4" />
             <span>ticketmaster.verified</span>
@@ -69,29 +68,28 @@ export default function TicketDisplay() {
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [currentIndex, setCurrentIndex] = useState(0);
   const [totalSlides, setTotalSlides] = useState(0);
+  const [showButtons, setShowButtons] = useState(false);
   const scrollRef = useRef(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Fetch ticket info
         const ticketSnapshot = await get(ref(db, "ticketinfo"));
         if (ticketSnapshot.exists()) {
           const data = ticketSnapshot.val();
           setTicketData(data);
         }
 
-        // Fetch ticket quantity (total slides)
         const quantitySnapshot = await get(ref(db, "uploads/latest/ticketQuantity"));
         if (quantitySnapshot.exists()) {
           const quantity = Number(quantitySnapshot.val());
           setTotalSlides(isNaN(quantity) ? 1 : quantity);
         } else {
-          setTotalSlides(1); // fallback
+          setTotalSlides(1);
         }
       } catch (error) {
         console.error("Error fetching data:", error);
-        setTotalSlides(1); // fallback on error
+        setTotalSlides(1);
       }
     };
 
@@ -120,6 +118,15 @@ export default function TicketDisplay() {
     }, 1000);
 
     return () => clearInterval(countdown);
+  }, [ticketData]);
+
+  useEffect(() => {
+    if (ticketData) {
+      const timer = setTimeout(() => {
+        setShowButtons(true);
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
   }, [ticketData]);
 
   const handleScroll = () => {
@@ -151,6 +158,19 @@ export default function TicketDisplay() {
           />
         ))}
       </div>
+
+      {showButtons && (
+        <div className="flex justify-center p-4">
+          <div className="flex gap-4 w-[300px]">
+            <button className="flex-1 bg-blue-600 text-white font-semibold py-2 px-6 rounded-xl shadow-md hover:bg-blue-700 transition">
+              Transfer
+            </button>
+            <button className="flex-1 bg-gray-300 text-white font-semibold py-2 px-6 rounded-xl shadow-md cursor-not-allowed">
+              Sell
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
