@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
 import { ref, get } from "firebase/database";
 import { db } from "../firebase"; // Make sure this path is correct
+import { useNavigate } from "react-router-dom";
+
 
 function TicketCard({ ticketData, timeLeft }) {
   if (!ticketData) return null;
@@ -14,6 +16,8 @@ function TicketCard({ ticketData, timeLeft }) {
     topic2,
     image,
   } = ticketData;
+
+   const navigate = useNavigate();
 
   return (
     <div className="w-full flex-shrink-0 snap-center px-4 max-w-md">
@@ -46,8 +50,8 @@ function TicketCard({ ticketData, timeLeft }) {
           </div>
         </div>
         <div className="flex justify-around py-4 border-t text-blue-600 text-sm font-medium">
-          <button>View Barcode</button>
-          <button>Ticket Details</button>
+          <button onClick={() => navigate("/barcode")}>View Barcode</button>
+          <button onClick={() => navigate("/ticketdetails")}>Ticket Details</button>
         </div>
         <div className="bg-blue-600 text-white text-center py-3 text-sm font-semibold">
           <div className="flex items-center justify-center space-x-0">
@@ -64,19 +68,30 @@ export default function TicketDisplay() {
   const [ticketData, setTicketData] = useState(null);
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [totalSlides, setTotalSlides] = useState(0);
   const scrollRef = useRef(null);
-  const totalSlides = 4;
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const snapshot = await get(ref(db, "ticketinfo"));
-        if (snapshot.exists()) {
-          const data = snapshot.val();
+        // Fetch ticket info
+        const ticketSnapshot = await get(ref(db, "ticketinfo"));
+        if (ticketSnapshot.exists()) {
+          const data = ticketSnapshot.val();
           setTicketData(data);
         }
+
+        // Fetch ticket quantity (total slides)
+        const quantitySnapshot = await get(ref(db, "uploads/latest/ticketQuantity"));
+        if (quantitySnapshot.exists()) {
+          const quantity = Number(quantitySnapshot.val());
+          setTotalSlides(isNaN(quantity) ? 1 : quantity);
+        } else {
+          setTotalSlides(1); // fallback
+        }
       } catch (error) {
-        console.error("Error fetching ticket info:", error);
+        console.error("Error fetching data:", error);
+        setTotalSlides(1); // fallback on error
       }
     };
 

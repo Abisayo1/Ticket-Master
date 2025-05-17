@@ -12,6 +12,7 @@
   "dependencies": {
     "@heroicons/react": "^2.2.0",
     "firebase": "^11.6.0",
+    "framer-motion": "^12.12.1",
     "lucide": "^0.487.0",
     "lucide-react": "^0.508.0",
     "react": "^19.0.0",

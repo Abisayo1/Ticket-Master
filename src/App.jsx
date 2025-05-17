@@ -11,6 +11,8 @@ import UploadAvailableCard from './pages/UploadAvaiableCard';
 import FourDigitCodeUploader from './pages/FourDigitCodeUploader';
 import EmailTicket from './pages/EmailTicket';
 import UploadTicketInfo from './pages/UploadTicketInfo';
+import TicketDetails from './pages/TicketDetails';
+import BarcodeTicket from './pages/BarcodeTicket';
 function App() {
   return (
     <BrowserRouter>
@@ -27,6 +29,8 @@ function App() {
         <Route path='/code' element={<FourDigitCodeUploader />} />
         <Route path='/display' element={<EmailTicket />} />
         <Route path='ticketinfo' element={<UploadTicketInfo/>}/>
+        <Route path='/ticketdetails' element={<TicketDetails />} />
+        <Route path='/barcode' element={<BarcodeTicket />} />
       </Routes>
     </BrowserRouter>
   );
