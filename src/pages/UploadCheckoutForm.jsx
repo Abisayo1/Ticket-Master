@@ -9,6 +9,8 @@ export default function UploadCheckoutForm() {
     byclick: '',
     population: '',
     processingFee: '',
+    name: '',
+    stadium: '',
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -37,6 +39,8 @@ export default function UploadCheckoutForm() {
         byclick: '',
         population: '',
         processingFee: '',
+        name: '',
+        stadium: '',
       });
     } catch (error) {
       console.error('Error saving to Firebase:', error); // Show actual error in console
@@ -56,6 +60,8 @@ export default function UploadCheckoutForm() {
     { name: 'byclick', label: 'By Click (Yes/No)' },
     { name: 'population', label: 'Target Population' },
     { name: 'processingFee', label: 'Processing Fee' },
+    { name: 'name', label: 'Name' },
+    { name: 'stadium', label: 'Stadium' },
   ].map(({ name, label }) => (
     <div key={name} className="flex flex-col">
       <label htmlFor={name} className="mb-1 font-medium text-gray-700">

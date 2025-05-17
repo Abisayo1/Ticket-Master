@@ -12,6 +12,8 @@ export default function TicketInsurance({ onInsuranceChange }) {
     soldBy: "",
     byClick: "",
     population: 0,
+    name: "",
+    stadium: "",
   });
 
   const [selected, setSelected] = useState(null); // null | true | false
@@ -34,6 +36,8 @@ export default function TicketInsurance({ onInsuranceChange }) {
           soldBy: uploadCheckout.soldby || "",
           byClick: uploadCheckout.byclick || "",
           population: Number(uploadCheckout.population) || 0,
+          name: uploadCheckout.name || "",
+          stadium: uploadCheckout.stadium || "",
         });
       } catch (err) {
         console.error("Failed to fetch Firebase data:", err);
@@ -60,6 +64,8 @@ export default function TicketInsurance({ onInsuranceChange }) {
     soldBy,
     byClick,
     population,
+    name,
+    stadium,
   } = data;
 
   const totalInsurance = ticketQuantity * insuranceFee;
@@ -126,7 +132,7 @@ export default function TicketInsurance({ onInsuranceChange }) {
             <span className="block text-xs text-white bg-purple-600 px-2 py-0.5 rounded mb-1 inline-block">
               HIGHLY RECOMMENDED
             </span>
-            Yes, protect my resale ticket purchase to Kendrick Lamar at MetLife Stadium.
+            Yes, protect my resale ticket purchase to {name} at {stadium}.
           </label>
         </div>
 

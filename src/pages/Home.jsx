@@ -48,7 +48,7 @@ export default function Home() {
       try {
         const storage = getStorage();
         const listRef = storageRef(storage, 'logos/');
-        const res = await listAll(listRef);
+        const res = await listAll(listRef);z
 
         if (res.items.length > 0) {
           const firstImageRef = res.items[0];
@@ -148,10 +148,6 @@ export default function Home() {
     </div>
   );
 }
-
-
-
-
 
   const { heading1, heading2, heading3, heading4, body1, body2, body3, body4, body5 } = content;
 
