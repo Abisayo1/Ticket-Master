@@ -20,7 +20,7 @@ export default function TicketCard() {
 
   if (!ticketData) {
     return (
-      <div className="h-screen w-screen flex items-center justify-center">
+      <div className="flex items-center justify-center">
         <p className="text-gray-500">Loading ticket info...</p>
       </div>
     );
