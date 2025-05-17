@@ -21,9 +21,9 @@ const TicketDetails = () => {
 
   return (
      <motion.div
-      initial={{ y: "100vh", opacity: 0 }}
+      initial={{  opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      exit={{ y: "100vh", opacity: 0 }}
+      exit={{  opacity: 0 }}
       transition={{ duration: 0.5, ease: "easeInOut" }}
       className="relative"
     >
