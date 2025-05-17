@@ -27,7 +27,7 @@ export default function TicketCard() {
   }
 
   return (
-    <div className="flex items-center mt-28 justify-center">
+    <div className="flex items-center mt-52 justify-center">
       <div className="bg-gray-800 text-white p-6 rounded-lg w-64 shadow-xl relative overflow-hidden">
         {/* Semi-circle notch */}
         <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-16 h-8 bg-white rounded-b-full z-10" />
