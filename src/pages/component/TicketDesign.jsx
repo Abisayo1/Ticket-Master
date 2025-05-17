@@ -36,7 +36,7 @@ const TicketDesign = () => {
       <div className="text-white mt-44 mb-32 max-w-sm w-full bg-[#0b1b3c] p-6 rounded-xl relative text-center">
         <h2 className="text-lg mb-14">{ticketInfo.level}</h2>
 
-        <div className="absolute inset-0 flex items-center justify-center text-[380px] text-gray-600 opacity-10 font-bold select-none">
+        <div className="absolute inset-0 flex items-center mt-32 justify-center text-[380px] text-gray-600 opacity-10 font-bold select-none">
           t
         </div>
 
