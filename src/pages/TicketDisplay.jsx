@@ -20,7 +20,7 @@ function TicketCard({ ticketData, timeLeft }) {
 
   return (
     <div className="w-full flex-shrink-0 snap-center px-4 max-w-lg">
-      <div className="rounded-2xl overflow-hidden shadow-lg bg-white">
+      <div className="rounded-2xl overflow-hidden bg-white">
         <div className="text-white text-center py-2 text-lg font-bold" style={{ backgroundColor: '#1c4ed5' }}>
           {level}
         </div>
@@ -162,10 +162,10 @@ export default function TicketDisplay() {
       {showButtons && (
         <div className="flex justify-center p-4">
           <div className="flex gap-4 w-[300px]">
-            <button className="flex-1 bg-blue-600 text-white font-semibold py-2 px-6 rounded-xl shadow-md hover:bg-blue-700 transition">
+            <button className="flex-1 bg-blue-600 text-white font-semibold py-2 px-6 rounded-xl hover:bg-blue-700 transition">
               Transfer
             </button>
-            <button className="flex-1 bg-gray-300 text-white font-semibold py-2 px-6 rounded-xl shadow-md cursor-not-allowed">
+            <button className="flex-1 bg-gray-300 text-white font-semibold py-2 px-6 rounded-xl cursor-not-allowed">
               Sell
             </button>
           </div>

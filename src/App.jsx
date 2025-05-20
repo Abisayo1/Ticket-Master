@@ -1,5 +1,5 @@
-import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom'; // ✅ Added Routes here
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import UploadForm from './pages/UploadForm';
 import Home from './pages/Home';
 import SplashScreen from './pages/component/SplashScreen';
@@ -8,29 +8,106 @@ import UploadCheckoutForm from './pages/UploadCheckoutForm';
 import PaymentPage from './pages/PaymentPage';
 import UploadZelle from './pages/UploadZelle';
 import UploadAvailableCard from './pages/UploadAvaiableCard';
-import FourDigitCodeUploader from './pages/FourDigitCodeUploader';
 import EmailTicket from './pages/EmailTicket';
 import UploadTicketInfo from './pages/UploadTicketInfo';
 import TicketDetails from './pages/TicketDetails';
 import BarcodeTicket from './pages/BarcodeTicket';
+import Access from './pages/component/Access';
+
+function ProtectedRoute({ accessGranted, children }) {
+  const location = useLocation();
+  if (!accessGranted) {
+    return <Navigate to="/access" state={{ returnPath: location.pathname }} replace />;
+  }
+  return children;
+}
+
 function App() {
+  const [accessGranted, setAccessGranted] = useState(false);
+
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        setAccessGranted(false);
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, []);
+
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/' element={<Home />} />
-        <Route path='/uploadform' element={<UploadForm />} />
-        <Route path='/uploadcheckoutform' element={<UploadCheckoutForm />} />
-        <Route path = '/checkout' element = {<Checkout />}/>
-        <Route path = '/home' element = {<Home />}/>
-        <Route path = '/splashscreen' element = {<SplashScreen />}/>
-        <Route path = '/payment' element = {<PaymentPage />}/>
-        <Route path = '/zelleupload' element = {<UploadZelle />}/>
-        <Route path='/avail' element={<UploadAvailableCard />} />
-        <Route path='/code' element={<FourDigitCodeUploader />} />
-        <Route path='/display' element={<EmailTicket />} />
-        <Route path='ticketinfo' element={<UploadTicketInfo/>}/>
-        <Route path='/ticketdetails' element={<TicketDetails />} />
-        <Route path='/barcode' element={<BarcodeTicket />} />
+        <Route path="/access" element={<Access setAccessGranted={setAccessGranted} />} />
+        
+        <Route path="/" element={
+          <ProtectedRoute accessGranted={accessGranted}>
+            <Home />
+          </ProtectedRoute>
+        } />
+        <Route path="/home" element={
+          <ProtectedRoute accessGranted={accessGranted}>
+            <Home />
+          </ProtectedRoute>
+        } />
+        <Route path="/uploadform" element={
+          <ProtectedRoute accessGranted={accessGranted}>
+            <UploadForm />
+          </ProtectedRoute>
+        } />
+        <Route path="/uploadcheckoutform" element={
+          <ProtectedRoute accessGranted={accessGranted}>
+            <UploadCheckoutForm />
+          </ProtectedRoute>
+        } />
+        <Route path="/checkout" element={
+          <ProtectedRoute accessGranted={accessGranted}>
+            <Checkout />
+          </ProtectedRoute>
+        } />
+        <Route path="/splashscreen" element={
+          <ProtectedRoute accessGranted={accessGranted}>
+            <SplashScreen />
+          </ProtectedRoute>
+        } />
+        <Route path="/payment" element={
+          <ProtectedRoute accessGranted={accessGranted}>
+            <PaymentPage />
+          </ProtectedRoute>
+        } />
+        <Route path="/zelleupload" element={
+          <ProtectedRoute accessGranted={accessGranted}>
+            <UploadZelle />
+          </ProtectedRoute>
+        } />
+        <Route path="/avail" element={
+          <ProtectedRoute accessGranted={accessGranted}>
+            <UploadAvailableCard />
+          </ProtectedRoute>
+        } />
+        <Route path="/display" element={
+          <ProtectedRoute accessGranted={accessGranted}>
+            <EmailTicket />
+          </ProtectedRoute>
+        } />
+        <Route path="/ticketinfo" element={
+          <ProtectedRoute accessGranted={accessGranted}>
+            <UploadTicketInfo />
+          </ProtectedRoute>
+        } />
+        <Route path="/ticketdetails" element={
+          <ProtectedRoute accessGranted={accessGranted}>
+            <TicketDetails />
+          </ProtectedRoute>
+        } />
+        <Route path="/barcode" element={
+          <ProtectedRoute accessGranted={accessGranted}>
+            <BarcodeTicket />
+          </ProtectedRoute>
+        } />
       </Routes>
     </BrowserRouter>
   );
