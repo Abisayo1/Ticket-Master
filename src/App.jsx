@@ -13,6 +13,7 @@ import UploadTicketInfo from './pages/UploadTicketInfo';
 import TicketDetails from './pages/TicketDetails';
 import BarcodeTicket from './pages/BarcodeTicket';
 import Access from './pages/component/Access';
+import FourDigitCodeUploader from './pages/FourDigitCodeUploader';
 
 function ProtectedRoute({ accessGranted, children }) {
   const location = useLocation();
@@ -96,6 +97,12 @@ function App() {
         <Route path="/ticketinfo" element={
           <ProtectedRoute accessGranted={accessGranted}>
             <UploadTicketInfo />
+          </ProtectedRoute>
+        } />
+
+        <Route path="/code" element={
+          <ProtectedRoute accessGranted={accessGranted}>
+            <FourDigitCodeUploader />
           </ProtectedRoute>
         } />
         <Route path="/ticketdetails" element={
