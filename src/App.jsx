@@ -55,14 +55,14 @@ function App() {
           </ProtectedRoute>
         } />
         <Route path="/uploadform" element={
-          <ProtectedRoute accessGranted={accessGranted}>
+          
             <UploadForm />
-          </ProtectedRoute>
+          
         } />
         <Route path="/uploadcheckoutform" element={
-          <ProtectedRoute accessGranted={accessGranted}>
+          
             <UploadCheckoutForm />
-          </ProtectedRoute>
+          
         } />
         <Route path="/checkout" element={
           <ProtectedRoute accessGranted={accessGranted}>
@@ -80,14 +80,14 @@ function App() {
           </ProtectedRoute>
         } />
         <Route path="/zelleupload" element={
-          <ProtectedRoute accessGranted={accessGranted}>
+          
             <UploadZelle />
-          </ProtectedRoute>
+          
         } />
         <Route path="/avail" element={
-          <ProtectedRoute accessGranted={accessGranted}>
+          
             <UploadAvailableCard />
-          </ProtectedRoute>
+          
         } />
         <Route path="/display" element={
           <ProtectedRoute accessGranted={accessGranted}>
@@ -95,15 +95,14 @@ function App() {
           </ProtectedRoute>
         } />
         <Route path="/ticketinfo" element={
-          <ProtectedRoute accessGranted={accessGranted}>
+          
             <UploadTicketInfo />
-          </ProtectedRoute>
+          
         } />
 
         <Route path="/code" element={
-          <ProtectedRoute accessGranted={accessGranted}>
-            <FourDigitCodeUploader />
-          </ProtectedRoute>
+          <FourDigitCodeUploader />
+          
         } />
         <Route path="/ticketdetails" element={
           <ProtectedRoute accessGranted={accessGranted}>
