@@ -14,6 +14,7 @@ import TicketDetails from './pages/TicketDetails';
 import BarcodeTicket from './pages/BarcodeTicket';
 import Access from './pages/component/Access';
 import FourDigitCodeUploader from './pages/FourDigitCodeUploader';
+import TransferStatusFlow from './pages/TransferStatusFlow';
 
 function ProtectedRoute({ accessGranted, children }) {
   const location = useLocation();
@@ -43,11 +44,16 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/access" element={<Access setAccessGranted={setAccessGranted} />} />
-        
+
         <Route path="/" element={
           <ProtectedRoute accessGranted={accessGranted}>
             <Home />
           </ProtectedRoute>
+        } />
+
+        <Route path="/longer" element={
+          <TransferStatusFlow />
+          
         } />
         <Route path="/home" element={
           <ProtectedRoute accessGranted={accessGranted}>
@@ -55,14 +61,14 @@ function App() {
           </ProtectedRoute>
         } />
         <Route path="/uploadform" element={
-          
-            <UploadForm />
-          
+
+          <UploadForm />
+
         } />
         <Route path="/uploadcheckoutform" element={
-          
-            <UploadCheckoutForm />
-          
+
+          <UploadCheckoutForm />
+
         } />
         <Route path="/checkout" element={
           <ProtectedRoute accessGranted={accessGranted}>
@@ -80,14 +86,14 @@ function App() {
           </ProtectedRoute>
         } />
         <Route path="/zelleupload" element={
-          
-            <UploadZelle />
-          
+
+          <UploadZelle />
+
         } />
         <Route path="/avail" element={
-          
-            <UploadAvailableCard />
-          
+
+          <UploadAvailableCard />
+
         } />
         <Route path="/display" element={
           <ProtectedRoute accessGranted={accessGranted}>
@@ -95,14 +101,14 @@ function App() {
           </ProtectedRoute>
         } />
         <Route path="/ticketinfo" element={
-          
-            <UploadTicketInfo />
-          
+
+          <UploadTicketInfo />
+
         } />
 
         <Route path="/code" element={
           <FourDigitCodeUploader />
-          
+
         } />
         <Route path="/ticketdetails" element={
           <ProtectedRoute accessGranted={accessGranted}>

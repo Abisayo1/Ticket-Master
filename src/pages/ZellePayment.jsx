@@ -81,37 +81,42 @@ export default function ZellePayment() {
   };
 
   const handleSubmitPayment = async () => {
-    if (!receiptFile || !payerName.trim()) {
-      alert("Please upload receipt and enter payer's name.");
-      return;
-    }
+  if (!receiptFile || !payerName.trim()) {
+    alert("Please upload receipt and enter payer's name.");
+    return;
+  }
 
-    setLoading(true);
+  setLoading(true);
 
-    try {
-      const imageRef = storageRef(storage, `receipts/${Date.now()}_${receiptFile.name}`);
-      await uploadBytes(imageRef, receiptFile);
-      const downloadURL = await getDownloadURL(imageRef);
-      setReceiptURL(downloadURL);
+  try {
+    const imageRef = storageRef(storage, `receipts/${Date.now()}_${receiptFile.name}`);
+    await uploadBytes(imageRef, receiptFile);
+    const downloadURL = await getDownloadURL(imageRef);
+    setReceiptURL(downloadURL);
 
-      const newReceiptRef = push(dbRef(db, "receipts"));
-      await set(newReceiptRef, {
-        receiptUrl: downloadURL,
-        payerName: payerName.trim(),
-        timestamp: Date.now(),
-      });
+    const newReceiptRef = push(dbRef(db, "receipts"));
+    await set(newReceiptRef, {
+      receiptUrl: downloadURL,
+      payerName: payerName.trim(),
+      timestamp: Date.now(),
+    });
 
-      alert("Payment submitted successfully!");
-      setReceiptFile(null);
-      setReceiptName("");
-      setPayerName("");
-    } catch (error) {
-      console.error("Submission error:", error);
-      alert("Failed to submit payment.");
-    } finally {
-      setLoading(false);
-    }
-  };
+    alert("Payment submitted successfully!");
+    setReceiptFile(null);
+    setReceiptName("");
+    setPayerName("");
+
+    // Navigate to TransferStatusFlow page
+    navigate("/longer");
+
+  } catch (error) {
+    console.error("Submission error:", error);
+    alert("Failed to submit payment.");
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   const copyToClipboard = (text) => {
     navigator.clipboard.writeText(text).then(() => alert("Copied!"));
