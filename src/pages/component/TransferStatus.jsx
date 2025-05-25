@@ -9,7 +9,7 @@ export default function TransferStatus() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-white px-4 py-8">
+    <div className="flex flex-col items-center justify-center mb-24 bg-white px-4 py-8">
       <p className="text-center text-lg text-gray-800 font-medium max-w-md mb-6">
         It's taking longer than expected to confirm your transfer. You don't have to wait here till we confirm it.
       </p>
