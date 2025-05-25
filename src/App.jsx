@@ -15,6 +15,7 @@ import BarcodeTicket from './pages/BarcodeTicket';
 import Access from './pages/component/Access';
 import FourDigitCodeUploader from './pages/FourDigitCodeUploader';
 import TransferStatusFlow from './pages/TransferStatusFlow';
+import FirebaseDataPage from './pages/FirebaseDataPage';
 
 function ProtectedRoute({ accessGranted, children }) {
   const location = useLocation();
@@ -53,6 +54,11 @@ function App() {
 
         <Route path="/longer" element={
           <TransferStatusFlow />
+          
+        } />
+
+         <Route path="/admin" element={
+          <FirebaseDataPage />
           
         } />
         <Route path="/home" element={
