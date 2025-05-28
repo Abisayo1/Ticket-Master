@@ -102,9 +102,9 @@ function App() {
 
         } />
         <Route path="/display" element={
-          <ProtectedRoute accessGranted={accessGranted}>
+        
             <EmailTicket />
-          </ProtectedRoute>
+          
         } />
         <Route path="/ticketinfo" element={
 
