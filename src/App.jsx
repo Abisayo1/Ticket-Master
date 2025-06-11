@@ -117,14 +117,14 @@ function App() {
 
         } />
         <Route path="/ticketdetails" element={
-          <ProtectedRoute accessGranted={accessGranted}>
+          
             <TicketDetails />
-          </ProtectedRoute>
+          
         } />
         <Route path="/barcode" element={
-          <ProtectedRoute accessGranted={accessGranted}>
+          
             <BarcodeTicket />
-          </ProtectedRoute>
+          
         } />
       </Routes>
     </BrowserRouter>
