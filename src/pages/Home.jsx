@@ -10,6 +10,7 @@ export default function Home() {
   const navigate = useNavigate();
 
   const [logoUrl, setLogoUrl] = useState('');
+  const [bannerUrl, setBannerUrl] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [accessGranted, setAccessGranted] = useState(false);
   const [userCode, setUserCode] = useState('');
@@ -78,16 +79,16 @@ export default function Home() {
   useEffect(() => {
     const fetchContent = async () => {
       try {
-        const contentRef = ref(db, 'uploads');
+        const contentRef = ref(db, 'uploads/latest');
         const snapshot = await get(contentRef);
         if (snapshot.exists()) {
           const data = snapshot.val();
-          const firstItem = Object.values(data)[0];
-          setContent(firstItem);
+          setContent(data);
 
-          if (firstItem.ticketQuantity) setTicketQuantity(firstItem.ticketQuantity);
-          if (firstItem.price) setPrice(firstItem.price);
-          if (firstItem.fees) setFees(firstItem.fees);
+          if (data.ticketQuantity) setTicketQuantity(data.ticketQuantity);
+          if (data.price) setPrice(data.price);
+          if (data.fees) setFees(data.fees);
+          if (data.banner) setBannerUrl(data.banner); // Load banner URL
         } else {
           console.log('No data found');
         }
@@ -101,14 +102,13 @@ export default function Home() {
     fetchContent();
   }, []);
 
-  // Show splash screen until timeout AND content loaded
   if (showSplash || !isContentLoaded) {
     return <SplashScreen />;
   }
 
   if (checkingCode) return <div>Checking access...</div>;
 
- const { heading1, heading2, heading3, heading4, body1, body2, body3, body4, body5 } = content;
+  const { heading1, heading2, heading3, heading4, body1, body2, body3, body4, body5 } = content;
 
   const increaseQuantity = () => {
     if (Number(ticketQuantity) < 5) {
@@ -138,12 +138,14 @@ export default function Home() {
           </div>
           <div className="mt-2 text-sm">{heading1}</div>
           <div className="flex flex-col md:flex-row md:items-center gap-4 mt-4">
-            <img
-              onClick={() => navigate('/uploadform')}
-              src="/image1.jpg"
-              alt="Event"
-              className="w-full md:w-48 h-32 object-cover hidden sm:block rounded-lg"
-            />
+            {bannerUrl && (
+              <img
+                onClick={() => navigate('/uploadform')}
+                src={bannerUrl}
+                alt="Event Banner"
+                className="w-full md:w-48 h-32 object-cover hidden sm:block rounded-lg"
+              />
+            )}
             <div>
               <h1 className="text-l font-bold">{heading2}</h1>
               <h2 className="text-l">{heading3}</h2>

@@ -21,6 +21,7 @@ export default function UploadForm() {
   });
 
   const [logoFile, setLogoFile] = useState(null);
+  const [bannerFile, setBannerFile] = useState(null); // ✅ New banner file
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e) => {
@@ -34,17 +35,30 @@ export default function UploadForm() {
     }
   };
 
+  const handleBannerChange = (e) => {
+    if (e.target.files[0]) {
+      setBannerFile(e.target.files[0]);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
 
     try {
       let logoURL = '';
+      let bannerURL = '';
 
       if (logoFile) {
-        const logoStorageRef = storageRef(storage, `logos/latest_logo`);
+        const logoStorageRef = storageRef(storage, 'logos/latest_logo');
         await uploadBytes(logoStorageRef, logoFile);
         logoURL = await getDownloadURL(logoStorageRef);
+      }
+
+      if (bannerFile) {
+        const bannerStorageRef = storageRef(storage, 'banners/latest_banner');
+        await uploadBytes(bannerStorageRef, bannerFile);
+        bannerURL = await getDownloadURL(bannerStorageRef);
       }
 
       const finalData = {
@@ -53,12 +67,13 @@ export default function UploadForm() {
         price: Number(formData.price),
         fees: Number(formData.fees),
         logo: logoURL,
+        banner: bannerURL, // ✅ Save banner URL too
       };
 
       const dataRef = ref(db, 'uploads/latest');
       await set(dataRef, finalData);
 
-      alert('Form submitted and overwritten in Firebase!');
+      alert('Form submitted with images successfully!');
 
       setFormData({
         heading1: '',
@@ -76,6 +91,7 @@ export default function UploadForm() {
         fees: '',
       });
       setLogoFile(null);
+      setBannerFile(null);
     } catch (error) {
       console.error('Error saving to Firebase:', error);
       alert('Failed to save data. Please try again.');
@@ -110,6 +126,17 @@ export default function UploadForm() {
             type="file"
             accept="image/*"
             onChange={handleLogoChange}
+            className="w-full p-2 border border-gray-300 rounded-xl"
+            required
+          />
+        </div>
+
+        <div>
+          <label className="block mb-1 font-medium">Upload Banner</label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleBannerChange}
             className="w-full p-2 border border-gray-300 rounded-xl"
             required
           />
