@@ -140,13 +140,7 @@ function App() {
 
         } />
 
-        <Route path="/ticketdetails" element={
-
-          <TicketDetails />
-
-        } />
-
-       
+             
         <Route path="/barcode" element={
 
           <BarcodeTicket />

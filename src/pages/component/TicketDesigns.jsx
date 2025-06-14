@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { ref, get } from "firebase/database";
-import { db } from "../../firebase"; // Ensure this path is correct
+import { db } from "../../firebase";
 
 const TicketDesigns = () => {
+  const location = useLocation();
+  const { ticketIndex } = location.state || {}; // Get ticketIndex from router state
+
   const [ticketInfo, setTicketInfo] = useState({
     level: "",
     sec: "",
@@ -16,11 +20,13 @@ const TicketDesigns = () => {
         const snapshot = await get(ref(db, "ticketinfos"));
         if (snapshot.exists()) {
           const data = snapshot.val();
+
+          const ticket = data.tickets?.[ticketIndex] || {};
           setTicketInfo({
             level: data.level || "",
-            sec: data.sec || "",
-            row: data.row || "",
-            seat: data.seat || "",
+            sec: ticket.sec || "-",
+            row: ticket.row || "-",
+            seat: ticket.seat || "-",
           });
         }
       } catch (error) {
@@ -29,7 +35,7 @@ const TicketDesigns = () => {
     };
 
     fetchTicketInfo();
-  }, []);
+  }, [ticketIndex]);
 
   return (
     <div className="flex items-center justify-center p-4">

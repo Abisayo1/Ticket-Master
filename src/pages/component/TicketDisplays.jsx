@@ -1,22 +1,15 @@
 import React, { useEffect, useState, useRef } from "react";
 import { ref, get } from "firebase/database";
-import { db } from "../../firebase"; // Ensure the path is correct
+import { db } from "../../firebase";
 import { useNavigate } from "react-router-dom";
-import AddToAppleWalletButton from "./AddToAppleWalletButton.jsx"; // Adjust the import path as necessary
+import AddToAppleWalletButton from "./AddToAppleWalletButton.jsx";
 
-function TicketCard({ ticketData, timeLeft }) {
-  if (!ticketData) return null;
+// TicketCard: Display a single ticket using shared data and individual ticket details
+function TicketCard({ sharedData, ticket, timeLeft, index }) {
+  if (!sharedData || !ticket) return null;
 
-  const {
-    level,
-    sec,
-    row,
-    seat,
-    topic1,
-    topic2,
-    image,
-  } = ticketData;
-
+  const { level, topic1, topic2, image } = sharedData;
+  const { sec, row, seat } = ticket;
   const navigate = useNavigate();
 
   return (
@@ -41,14 +34,18 @@ function TicketCard({ ticketData, timeLeft }) {
           </div>
         </div>
         <div className="text-center text-gray-700 text-sm p-4">
-         < AddToAppleWalletButton />
+          <AddToAppleWalletButton />
         </div>
-        <div className="flex justify-around py-4 mt-10 mr-10 ml-10 text-blue-600 text-sm font-medium" style={{ columnGap: '0px' }}>
-          <button onClick={() => navigate("/sbarcode")}>View Barcode</button>
-          <button onClick={() => navigate("/sticketdetails")}>Ticket Details</button>
+        <div className="flex justify-around py-4 mt-10 mr-10 ml-10 text-blue-600 text-sm font-medium">
+          <button onClick={() => navigate("/sbarcode", { state: { ticketIndex: index } })}>
+            View Barcode
+          </button>
+          <button onClick={() => navigate("/sticketdetails", { state: { ticketIndex: index } })}>
+            Ticket Details
+          </button>
         </div>
         <div className="text-white text-center py-3 text-sm font-semibold" style={{ backgroundColor: '#1c4ed5' }}>
-          <div className="flex items-center justify-center space-x-0">
+          <div className="flex items-center justify-center space-x-1">
             <img src="/ticket.png" alt="Verified" className="w-4 h-4" />
             <span>ticketmaster.verified</span>
           </div>
@@ -58,33 +55,24 @@ function TicketCard({ ticketData, timeLeft }) {
   );
 }
 
+// TicketDisplays: Fetches ticket data and displays each ticket card
 export default function TicketDisplays() {
   const [ticketData, setTicketData] = useState(null);
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [totalSlides, setTotalSlides] = useState(0);
   const [showButtons, setShowButtons] = useState(false);
   const scrollRef = useRef(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const ticketSnapshot = await get(ref(db, "ticketinfos"));
-        if (ticketSnapshot.exists()) {
-          const data = ticketSnapshot.val();
+        const snapshot = await get(ref(db, "ticketinfos"));
+        if (snapshot.exists()) {
+          const data = snapshot.val();
           setTicketData(data);
         }
-
-        const quantitySnapshot = await get(ref(db, "uploaded/latest/ticketQuantitys"));
-        if (quantitySnapshot.exists()) {
-          const quantity = Number(quantitySnapshot.val());
-          setTotalSlides(isNaN(quantity) ? 1 : quantity);
-        } else {
-          setTotalSlides(1);
-        }
       } catch (error) {
-        console.error("Error fetching data:", error);
-        setTotalSlides(1);
+        console.error("Error fetching ticket data:", error);
       }
     };
 
@@ -92,34 +80,32 @@ export default function TicketDisplays() {
   }, []);
 
   useEffect(() => {
-    if (!ticketData || !ticketData.timestamp) return;
+    if (!ticketData?.timestamp) return;
 
-    const countdown = setInterval(() => {
+    const interval = setInterval(() => {
       const now = Date.now();
-      const difference = ticketData.timestamp - now;
+      const diff = ticketData.timestamp - now;
 
-      if (difference <= 0) {
-        clearInterval(countdown);
+      if (diff <= 0) {
+        clearInterval(interval);
         setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
       } else {
-        const totalSeconds = Math.floor(difference / 1000);
-        const days = Math.floor(totalSeconds / (3600 * 24));
-        const hours = Math.floor((totalSeconds % (3600 * 24)) / 3600);
-        const minutes = Math.floor((totalSeconds % 3600) / 60);
-        const seconds = totalSeconds % 60;
-
-        setTimeLeft({ days, hours, minutes, seconds });
+        const totalSeconds = Math.floor(diff / 1000);
+        setTimeLeft({
+          days: Math.floor(totalSeconds / (3600 * 24)),
+          hours: Math.floor((totalSeconds % (3600 * 24)) / 3600),
+          minutes: Math.floor((totalSeconds % 3600) / 60),
+          seconds: totalSeconds % 60,
+        });
       }
     }, 1000);
 
-    return () => clearInterval(countdown);
+    return () => clearInterval(interval);
   }, [ticketData]);
 
   useEffect(() => {
     if (ticketData) {
-      const timer = setTimeout(() => {
-        setShowButtons(true);
-      }, 1000);
+      const timer = setTimeout(() => setShowButtons(true), 1000);
       return () => clearTimeout(timer);
     }
   }, [ticketData]);
@@ -131,6 +117,8 @@ export default function TicketDisplays() {
     setCurrentIndex(index);
   };
 
+  const tickets = ticketData?.tickets || [];
+
   return (
     <div className="flex flex-col items-center justify-center bg-white p-6 space-y-4">
       <div
@@ -138,13 +126,28 @@ export default function TicketDisplays() {
         onScroll={handleScroll}
         className="w-full overflow-x-scroll flex snap-x snap-mandatory space-x-4 pb-4 scroll-smooth hide-scrollbar"
       >
-        {[...Array(totalSlides)].map((_, index) => (
-          <TicketCard key={index} ticketData={ticketData} timeLeft={timeLeft} />
-        ))}
+        {tickets.length > 0 ? (
+          tickets.map((ticket, index) => (
+            <TicketCard
+              key={index}
+              index={index}
+              sharedData={ticketData}
+              ticket={ticket}
+              timeLeft={timeLeft}
+            />
+          ))
+        ) : (
+          <TicketCard
+            index={0}
+            sharedData={ticketData}
+            ticket={{ sec: "-", row: "-", seat: "-" }}
+            timeLeft={timeLeft}
+          />
+        )}
       </div>
 
       <div className="flex space-x-2">
-        {[...Array(totalSlides)].map((_, index) => (
+        {tickets.map((_, index) => (
           <span
             key={index}
             className={`w-2.5 h-2.5 rounded-full transition-all ${

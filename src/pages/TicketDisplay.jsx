@@ -1,20 +1,14 @@
 import React, { useEffect, useState, useRef } from "react";
 import { ref, get } from "firebase/database";
-import { db } from "../firebase"; // Ensure the path is correct
+import { db } from "../firebase";
 import { useNavigate } from "react-router-dom";
 
-function TicketCard({ ticketData, timeLeft }) {
-  if (!ticketData) return null;
+// TicketCard Component
+function TicketCard({ ticketBase, dynamicInfo, timeLeft, index }) {
+  if (!ticketBase || !dynamicInfo) return null;
 
-  const {
-    level,
-    sec,
-    row,
-    seat,
-    topic1,
-    topic2,
-    image,
-  } = ticketData;
+  const { level, topic1, topic2, image } = ticketBase;
+  const { sec, row, seat } = dynamicInfo;
 
   const navigate = useNavigate();
 
@@ -48,9 +42,9 @@ function TicketCard({ ticketData, timeLeft }) {
             <div><span>{timeLeft.seconds}</span><div className="text-xs">SEC</div></div>
           </div>
         </div>
-        <div className="flex justify-around py-4 mt-10 mr-10 ml-10 text-blue-600 text-sm font-medium" style={{ columnGap: '0px' }}>
-          <button onClick={() => navigate("/barcode")}>View Barcode</button>
-          <button onClick={() => navigate("/ticketdetails")}>Ticket Details</button>
+        <div className="flex justify-around py-4 mt-10 mr-10 ml-10 text-blue-600 text-sm font-medium">
+          <button onClick={() => navigate("/barcode", { state: { index } })}>View Barcode</button>
+          <button onClick={() => navigate("/ticketdetails", { state: { index } })}>Ticket Details</button>
         </div>
         <div className="text-white text-center py-3 text-sm font-semibold" style={{ backgroundColor: '#1c4ed5' }}>
           <div className="flex items-center justify-center space-x-0">
@@ -63,33 +57,48 @@ function TicketCard({ ticketData, timeLeft }) {
   );
 }
 
+// Main Component
 export default function TicketDisplay() {
-  const [ticketData, setTicketData] = useState(null);
+  const [ticketBase, setTicketBase] = useState(null);
+  const [ticketVariations, setTicketVariations] = useState([]);
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+  const [countdownTarget, setCountdownTarget] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [totalSlides, setTotalSlides] = useState(0);
   const [showButtons, setShowButtons] = useState(false);
   const scrollRef = useRef(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const ticketSnapshot = await get(ref(db, "ticketinfo"));
-        if (ticketSnapshot.exists()) {
-          const data = ticketSnapshot.val();
-          setTicketData(data);
-        }
+        const baseSnapshot = await get(ref(db, "ticketinfo"));
+        if (baseSnapshot.exists()) {
+          const baseData = baseSnapshot.val();
+          const { tickets, day, month, year, ...rest } = baseData;
 
-        const quantitySnapshot = await get(ref(db, "uploads/latest/ticketQuantity"));
-        if (quantitySnapshot.exists()) {
-          const quantity = Number(quantitySnapshot.val());
-          setTotalSlides(isNaN(quantity) ? 1 : quantity);
+          setTicketBase(rest);
+          setTicketVariations(tickets ? Object.values(tickets) : []);
+
+          // Parse event date
+          const dayNum = parseInt(day, 10);
+          const monthNum = parseInt(month, 10); // Jan = 1
+          const yearNum = parseInt(year, 10);
+
+          if (!isNaN(dayNum) && !isNaN(monthNum) && !isNaN(yearNum)) {
+            const eventDate = new Date(Date.UTC(yearNum, monthNum - 1, dayNum, 0, 0, 0));
+            if (!isNaN(eventDate.getTime())) {
+              setCountdownTarget(eventDate.getTime());
+            } else {
+              console.error("Invalid event date format");
+            }
+          } else {
+            console.warn("Missing or invalid day/month/year in Firebase data.");
+          }
         } else {
-          setTotalSlides(1);
+          setTicketVariations([]);
         }
       } catch (error) {
         console.error("Error fetching data:", error);
-        setTotalSlides(1);
+        setTicketVariations([]);
       }
     };
 
@@ -97,17 +106,17 @@ export default function TicketDisplay() {
   }, []);
 
   useEffect(() => {
-    if (!ticketData || !ticketData.timestamp) return;
+    if (!countdownTarget) return;
 
     const countdown = setInterval(() => {
       const now = Date.now();
-      const difference = ticketData.timestamp - now;
+      const diff = countdownTarget - now;
 
-      if (difference <= 0) {
+      if (diff <= 0) {
         clearInterval(countdown);
         setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
       } else {
-        const totalSeconds = Math.floor(difference / 1000);
+        const totalSeconds = Math.floor(diff / 1000);
         const days = Math.floor(totalSeconds / (3600 * 24));
         const hours = Math.floor((totalSeconds % (3600 * 24)) / 3600);
         const minutes = Math.floor((totalSeconds % 3600) / 60);
@@ -118,16 +127,16 @@ export default function TicketDisplay() {
     }, 1000);
 
     return () => clearInterval(countdown);
-  }, [ticketData]);
+  }, [countdownTarget]);
 
   useEffect(() => {
-    if (ticketData) {
+    if (ticketBase) {
       const timer = setTimeout(() => {
         setShowButtons(true);
       }, 1000);
       return () => clearTimeout(timer);
     }
-  }, [ticketData]);
+  }, [ticketBase]);
 
   const handleScroll = () => {
     const scrollLeft = scrollRef.current.scrollLeft;
@@ -143,13 +152,19 @@ export default function TicketDisplay() {
         onScroll={handleScroll}
         className="w-full overflow-x-scroll flex snap-x snap-mandatory space-x-4 pb-4 scroll-smooth hide-scrollbar"
       >
-        {[...Array(totalSlides)].map((_, index) => (
-          <TicketCard key={index} ticketData={ticketData} timeLeft={timeLeft} />
+        {ticketVariations.map((ticket, index) => (
+          <TicketCard
+            key={index}
+            index={index}
+            ticketBase={ticketBase}
+            dynamicInfo={ticket}
+            timeLeft={timeLeft}
+          />
         ))}
       </div>
 
       <div className="flex space-x-2">
-        {[...Array(totalSlides)].map((_, index) => (
+        {ticketVariations.map((_, index) => (
           <span
             key={index}
             className={`w-2.5 h-2.5 rounded-full transition-all ${

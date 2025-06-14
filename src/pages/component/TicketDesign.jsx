@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { ref, get } from "firebase/database";
-import { db } from "../../firebase"; // Ensure this path is correct
+import { db } from "../../firebase";
 
-const TicketDesign = () => {
+const TicketDesigns = () => {
+  const location = useLocation();
+  const { index: ticketIndex } = location.state || {}; // Use `index` to match navigation from TicketCard
+
   const [ticketInfo, setTicketInfo] = useState({
     level: "",
-    sec: "",
-    row: "",
-    seat: "",
+    sec: "-",
+    row: "-",
+    seat: "-",
   });
 
   useEffect(() => {
@@ -16,11 +20,15 @@ const TicketDesign = () => {
         const snapshot = await get(ref(db, "ticketinfo"));
         if (snapshot.exists()) {
           const data = snapshot.val();
+          const ticketArray = data.tickets ? Object.values(data.tickets) : [];
+
+          const ticket = ticketArray[ticketIndex] || {};
+
           setTicketInfo({
             level: data.level || "",
-            sec: data.sec || "",
-            row: data.row || "",
-            seat: data.seat || "",
+            sec: ticket.sec || "-",
+            row: ticket.row || "-",
+            seat: ticket.seat || "-",
           });
         }
       } catch (error) {
@@ -29,7 +37,7 @@ const TicketDesign = () => {
     };
 
     fetchTicketInfo();
-  }, []);
+  }, [ticketIndex]);
 
   return (
     <div className="flex items-center justify-center p-4">
@@ -57,7 +65,7 @@ const TicketDesign = () => {
 
         <div className="relative z-10 mt-6 bg-white p-3 rounded-md">
           <img
-            src="/barcodd.jpeg" // Replace with actual barcode image path if needed
+            src="/barcodd.jpeg" // Replace this with actual barcode image if needed
             alt="Barcode"
             className="mx-auto"
           />
@@ -75,4 +83,4 @@ const TicketDesign = () => {
   );
 };
 
-export default TicketDesign;
+export default TicketDesigns;
