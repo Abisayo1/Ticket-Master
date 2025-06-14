@@ -77,9 +77,9 @@ function App() {
 
         } />
         <Route path="/checkout" element={
-          
+          <ProtectedRoute accessGranted={accessGranted}>
             <Checkout />
-          
+          </ProtectedRoute>
         } />
         <Route path="/splashscreen" element={
           <ProtectedRoute accessGranted={accessGranted}>
