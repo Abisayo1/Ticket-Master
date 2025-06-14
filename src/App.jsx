@@ -16,6 +16,10 @@ import Access from './pages/component/Access';
 import FourDigitCodeUploader from './pages/FourDigitCodeUploader';
 import TransferStatusFlow from './pages/TransferStatusFlow';
 import FirebaseDataPage from './pages/FirebaseDataPage';
+import UploadTicketInfos from './pages/UploadTicketInfos';
+import EmailTickets from './pages/EmailTickets';
+import TicketDetailss from './pages/TicketDetailss';
+import BarcodeTickets from './pages/BarcodeTickets';
 
 function ProtectedRoute({ accessGranted, children }) {
   const location = useLocation();
@@ -54,12 +58,12 @@ function App() {
 
         <Route path="/longer" element={
           <TransferStatusFlow />
-          
+
         } />
 
-         <Route path="/admin" element={
+        <Route path="/admin" element={
           <FirebaseDataPage />
-          
+
         } />
         <Route path="/home" element={
           <ProtectedRoute accessGranted={accessGranted}>
@@ -102,13 +106,27 @@ function App() {
 
         } />
         <Route path="/display" element={
-        
-            <EmailTicket />
-          
+
+          <EmailTicket />
+
         } />
+
+        <Route path="/displays" element={
+
+          <EmailTickets />
+
+        } />
+
+
         <Route path="/ticketinfo" element={
 
           <UploadTicketInfo />
+
+        } />
+
+        <Route path="/ticketinfos" element={
+
+          <UploadTicketInfos />
 
         } />
 
@@ -117,15 +135,39 @@ function App() {
 
         } />
         <Route path="/ticketdetails" element={
-          
-            <TicketDetails />
-          
+
+          <TicketDetails />
+
         } />
+
+        <Route path="/ticketdetails" element={
+
+          <TicketDetails />
+
+        } />
+
+       
         <Route path="/barcode" element={
-          
-            <BarcodeTicket />
-          
+
+          <BarcodeTicket />
+
         } />
+
+
+         <Route path="/sticketdetails" element={
+
+          <TicketDetailss />
+
+        } />
+
+         <Route path="/sbarcode" element={
+
+          <BarcodeTickets />
+
+        } />
+
+       
+
       </Routes>
     </BrowserRouter>
   );
