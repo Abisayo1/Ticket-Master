@@ -61,7 +61,7 @@ function App() {
 
         } />
 
-        <Route path="/admin" element={
+        <Route path="/admindash" element={
           <FirebaseDataPage />
 
         } />

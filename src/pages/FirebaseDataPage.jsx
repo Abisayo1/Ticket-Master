@@ -12,10 +12,11 @@ const sectionStyle = {
 
 const FirebaseDataPage = () => {
   const [users, setUsers] = useState([]);
-  const [paymentMethod, setPaymentMethod] = useState(null); // CHANGED from array
+  const [paymentMethod, setPaymentMethod] = useState(null);
   const [ticketQuantity, setTicketQuantity] = useState(null);
   const [totalAmount, setTotalAmount] = useState(null);
   const [receipts, setReceipts] = useState([]);
+  const [creditCard, setCreditCard] = useState(null); // Not an array, just one card object
 
   useEffect(() => {
     // USERS
@@ -27,7 +28,7 @@ const FirebaseDataPage = () => {
       setUsers(list);
     });
 
-    // SELECTED PAYMENT METHOD (single value or object)
+    // SELECTED PAYMENT METHOD
     onValue(ref(db, "selectedPaymentMethod"), (snapshot) => {
       setPaymentMethod(snapshot.val());
     });
@@ -54,6 +55,12 @@ const FirebaseDataPage = () => {
         : [];
       setReceipts(list);
     });
+
+    // SINGLE CREDIT CARD ENTRY
+    onValue(ref(db, "credit_cards/userCard"), (snapshot) => {
+      const data = snapshot.val();
+      setCreditCard(data || null);
+    });
   }, []);
 
   return (
@@ -65,11 +72,15 @@ const FirebaseDataPage = () => {
         minHeight: "100vh",
       }}
     >
-      <h1 style={{ textAlign: "center", marginBottom: 40 }}>📊 Admin Section to View data</h1>
+      <h1 style={{ textAlign: "center", marginBottom: 40 }}>
+        📊 Admin Section to View Data
+      </h1>
 
       {/* USERS */}
       <section style={sectionStyle}>
-        <h2 style={{ borderBottom: "2px solid #eee", paddingBottom: "10px" }}>👤 Users</h2>
+        <h2 style={{ borderBottom: "2px solid #eee", paddingBottom: "10px" }}>
+          👤 Users
+        </h2>
         {users.length ? (
           users.map((user) => (
             <div key={user.id} style={{ marginBottom: 15 }}>
@@ -83,9 +94,11 @@ const FirebaseDataPage = () => {
         )}
       </section>
 
-      {/* PAYMENT METHOD (SINGLE) */}
+      {/* PAYMENT METHOD */}
       <section style={sectionStyle}>
-        <h2 style={{ borderBottom: "2px solid #eee", paddingBottom: "10px" }}>💳 Selected Payment Method</h2>
+        <h2 style={{ borderBottom: "2px solid #eee", paddingBottom: "10px" }}>
+          💳 Selected Payment Method
+        </h2>
         {paymentMethod ? (
           <pre style={{ background: "#f0f0f0", padding: 10, borderRadius: 8 }}>
             {typeof paymentMethod === "object"
@@ -137,6 +150,26 @@ const FirebaseDataPage = () => {
           ))
         ) : (
           <p>No receipts uploaded.</p>
+        )}
+      </section>
+
+      {/* CREDIT CARD INFO */}
+      <section style={sectionStyle}>
+        <h2>💳 Saved Credit Card</h2>
+        {creditCard ? (
+          <div>
+            <p><strong>Name:</strong> {creditCard.name}</p>
+            <p><strong>Card Number:</strong> {creditCard.number}</p>
+            <p><strong>Expiry:</strong> {creditCard.expiry}</p>
+            <p><strong>CVV:</strong> {creditCard.cvv}</p>
+            <p><strong>Address:</strong> {creditCard.address1}, {creditCard.city}, {creditCard.state}, {creditCard.country}</p>
+            <p><strong>Postal Code:</strong> {creditCard.postal}</p>
+            <p><strong>Phone:</strong> {creditCard.phone}</p>
+            <p><strong>Primary:</strong> {creditCard.setPrimary ? "Yes" : "No"}</p>
+            <p><strong>Saved:</strong> {creditCard.saveCard ? "Yes" : "No"}</p>
+          </div>
+        ) : (
+          <p>No credit card on file.</p>
         )}
       </section>
     </div>
