@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { ref, get, child } from "firebase/database";
+import { ref, get } from "firebase/database";
 import { db } from "../../firebase";
 import { useLocation } from "react-router-dom";
 
 export default function TicketCards() {
   const location = useLocation();
   const passedIndex = location.state?.ticketIndex;
+  const passedUsername = location.state?.username; // ✅ Get username from state
 
   const [ticketData, setTicketData] = useState(null);
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -13,27 +14,31 @@ export default function TicketCards() {
 
   useEffect(() => {
     const fetchData = async () => {
+      if (!passedUsername) {
+        console.error("No username provided in location state.");
+        setLoading(false);
+        return;
+      }
+
       try {
-        const dbRef = ref(db);
+        const userRef = ref(db, `ticketinfos/${passedUsername}`);
+        const snapshot = await get(userRef);
 
-        // Fetch ticket info and fallback index
-        const ticketSnap = await get(child(dbRef, "ticketinfos"));
-        const indexSnap = await get(child(dbRef, "uploaded/latest/selectedTicketIndex"));
+        if (snapshot.exists()) {
+          const ticketInfo = snapshot.val();
+          const tickets = ticketInfo.tickets || [];
 
-        if (ticketSnap.exists()) {
-          const ticketInfo = ticketSnap.val();
-          const fallbackIndex = indexSnap.exists() ? Number(indexSnap.val()) : 0;
-
-          const tickets = ticketInfo.tickets;
           const indexToUse =
             typeof passedIndex === "number" &&
             passedIndex >= 0 &&
             passedIndex < tickets.length
               ? passedIndex
-              : fallbackIndex;
+              : 0;
 
           setTicketData(ticketInfo);
           setSelectedIndex(indexToUse);
+        } else {
+          console.error("No ticket data found for user:", passedUsername);
         }
       } catch (err) {
         console.error("Error loading ticket:", err);
@@ -43,7 +48,7 @@ export default function TicketCards() {
     };
 
     fetchData();
-  }, [passedIndex]);
+  }, [passedIndex, passedUsername]);
 
   if (loading) {
     return (
@@ -66,10 +71,8 @@ export default function TicketCards() {
   return (
     <div className="flex flex-col items-center mt-32">
       <div className="bg-gray-800 text-white p-6 rounded-lg w-64 shadow-xl relative overflow-hidden">
-        {/* Semi-circle notch */}
         <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-16 h-8 bg-white rounded-b-full z-10" />
 
-        {/* Ticket content */}
         <div className="relative z-20 text-center">
           <p className="text-sm text-gray-300 mt-20 mb-4">
             {ticketData.level || "N/A"}

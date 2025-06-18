@@ -105,13 +105,13 @@ function App() {
           <UploadAvailableCard />
 
         } />
-        <Route path="/display" element={
+        <Route path="/display/:username" element={
 
           <EmailTicket />
 
         } />
 
-        <Route path="/displays" element={
+        <Route path="/displays/:username" element={
 
           <EmailTickets />
 

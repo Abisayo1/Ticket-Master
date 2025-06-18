@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useRef } from "react";
 import { ref, get } from "firebase/database";
 import { db } from "../../firebase";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import AddToAppleWalletButton from "./AddToAppleWalletButton.jsx";
 
-// TicketCard: Display a single ticket using shared data and individual ticket details
-function TicketCard({ sharedData, ticket, timeLeft, index }) {
+// TicketCard component
+function TicketCard({ sharedData, ticket, timeLeft, index, username }) {
   if (!sharedData || !ticket) return null;
 
   const { level, topic1, topic2, image } = sharedData;
@@ -37,10 +37,14 @@ function TicketCard({ sharedData, ticket, timeLeft, index }) {
           <AddToAppleWalletButton />
         </div>
         <div className="flex justify-around py-4 mt-10 mr-10 ml-10 text-blue-600 text-sm font-medium">
-          <button onClick={() => navigate("/sbarcode", { state: { ticketIndex: index } })}>
+          <button
+            onClick={() => navigate("/sbarcode", { state: { ticketIndex: index, username } })}
+          >
             View Barcode
           </button>
-          <button onClick={() => navigate("/sticketdetails", { state: { ticketIndex: index } })}>
+          <button
+            onClick={() => navigate("/sticketdetails", { state: { ticketIndex: index, username } })}
+          >
             Ticket Details
           </button>
         </div>
@@ -55,18 +59,19 @@ function TicketCard({ sharedData, ticket, timeLeft, index }) {
   );
 }
 
-// TicketDisplays: Fetches ticket data and displays each ticket card
+// Main TicketDisplays component
 export default function TicketDisplays() {
   const [ticketData, setTicketData] = useState(null);
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showButtons, setShowButtons] = useState(false);
   const scrollRef = useRef(null);
+  const { username } = useParams(); // 🟢 Get username from the URL
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const snapshot = await get(ref(db, "ticketinfos"));
+        const snapshot = await get(ref(db, `ticketinfos/${username}`)); // 🔵 Fetch user-specific data
         if (snapshot.exists()) {
           const data = snapshot.val();
           setTicketData(data);
@@ -77,7 +82,7 @@ export default function TicketDisplays() {
     };
 
     fetchData();
-  }, []);
+  }, [username]);
 
   useEffect(() => {
     if (!ticketData?.timestamp) return;
@@ -131,6 +136,7 @@ export default function TicketDisplays() {
             <TicketCard
               key={index}
               index={index}
+              username={username}
               sharedData={ticketData}
               ticket={ticket}
               timeLeft={timeLeft}
@@ -139,6 +145,7 @@ export default function TicketDisplays() {
         ) : (
           <TicketCard
             index={0}
+            username={username}
             sharedData={ticketData}
             ticket={{ sec: "-", row: "-", seat: "-" }}
             timeLeft={timeLeft}

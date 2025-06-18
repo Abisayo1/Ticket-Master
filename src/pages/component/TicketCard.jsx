@@ -5,7 +5,8 @@ import { useLocation } from "react-router-dom";
 
 export default function TicketCard() {
   const location = useLocation();
-  const passedIndex = location.state?.index; // Make sure this matches how it's passed
+  const passedIndex = location.state?.index;
+  const username = location.state?.username; // ✅ Get username from navigation state
 
   const [ticketData, setTicketData] = useState(null);
   const [ticketList, setTicketList] = useState([]);
@@ -14,11 +15,13 @@ export default function TicketCard() {
 
   useEffect(() => {
     const fetchData = async () => {
+      if (!username) return;
+
       try {
-        const snapshot = await get(ref(db, "ticketinfo"));
+        const snapshot = await get(ref(db, `ticketinfo/${username}`));
         if (snapshot.exists()) {
           const data = snapshot.val();
-          const tickets = Object.values(data.tickets || {}); // 🔁 Convert to array
+          const tickets = data.tickets || [];
 
           const index =
             typeof passedIndex === "number" &&
@@ -39,7 +42,7 @@ export default function TicketCard() {
     };
 
     fetchData();
-  }, [passedIndex]);
+  }, [username, passedIndex]);
 
   if (loading) {
     return (

@@ -5,7 +5,7 @@ import { db } from "../../firebase";
 
 const TicketDesigns = () => {
   const location = useLocation();
-  const { ticketIndex } = location.state || {}; // Get ticketIndex from router state
+  const { ticketIndex = 0, username = null } = location.state || {}; // ✅ Destructure with defaults
 
   const [ticketInfo, setTicketInfo] = useState({
     level: "",
@@ -16,18 +16,27 @@ const TicketDesigns = () => {
 
   useEffect(() => {
     const fetchTicketInfo = async () => {
+      if (!username) {
+        console.error("Username not provided in location state.");
+        return;
+      }
+
       try {
-        const snapshot = await get(ref(db, "ticketinfos"));
+        const userRef = ref(db, `ticketinfos/${username}`);
+        const snapshot = await get(userRef);
+
         if (snapshot.exists()) {
           const data = snapshot.val();
-
           const ticket = data.tickets?.[ticketIndex] || {};
+
           setTicketInfo({
             level: data.level || "",
             sec: ticket.sec || "-",
             row: ticket.row || "-",
             seat: ticket.seat || "-",
           });
+        } else {
+          console.error("No ticket data found for user:", username);
         }
       } catch (error) {
         console.error("Error fetching ticket info:", error);
@@ -35,7 +44,7 @@ const TicketDesigns = () => {
     };
 
     fetchTicketInfo();
-  }, [ticketIndex]);
+  }, [ticketIndex, username]);
 
   return (
     <div className="flex items-center justify-center p-4">
@@ -63,7 +72,7 @@ const TicketDesigns = () => {
 
         <div className="relative z-10 mt-6 bg-white p-3 rounded-md">
           <img
-            src="/barcodd.jpeg" // Replace with actual barcode image path if needed
+            src="/barcodd.jpeg"
             alt="Barcode"
             className="mx-auto"
           />

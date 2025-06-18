@@ -4,6 +4,7 @@ import { db } from '../firebase'; // Ensure path is correct
 
 export default function Uploadticketinfos() {
   const [formData, setFormData] = useState({
+    username: '',      // NEW FIELD
     level: '',
     topic1: '',
     topic2: '',
@@ -18,7 +19,7 @@ export default function Uploadticketinfos() {
   useEffect(() => {
     const qty = parseInt(formData.ticketQuantity, 10);
     if (!isNaN(qty) && qty > 0) {
-      const newTickets = Array.from({ length: qty }, (_, index) => ({
+      const newTickets = Array.from({ length: qty }, () => ({
         sec: '',
         row: '',
         seat: '',
@@ -62,9 +63,11 @@ export default function Uploadticketinfos() {
         tickets, // store all ticket seat info
       };
 
-      const dataRef = ref(db, 'ticketinfos');
-      await set(dataRef, fullData);
+      // Save under username path
+      const userRef = ref(db, `ticketinfos/${formData.username}`);
+      await set(userRef, fullData);
 
+      // Optionally store ticketQuantity separately
       const ticketQtyRef = ref(db, 'uploaded/latest/ticketQuantitys');
       await set(ticketQtyRef, formData.ticketQuantity);
 
@@ -72,6 +75,7 @@ export default function Uploadticketinfos() {
 
       // Reset form
       setFormData({
+        username: '',
         level: '',
         topic1: '',
         topic2: '',
@@ -91,8 +95,9 @@ export default function Uploadticketinfos() {
     <div className="max-w-3xl mx-auto p-6 bg-white rounded-2xl shadow-md mt-10">
       <h2 className="text-2xl font-semibold mb-6 text-center">Upload Ticket Info</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
-        {/* General Info Fields */}
+        {/* Input Fields */}
         {[
+          { name: 'username', label: 'Username' },
           { name: 'level', label: 'Level' },
           { name: 'topic1', label: 'Topic 1' },
           { name: 'topic2', label: 'Topic 2' },

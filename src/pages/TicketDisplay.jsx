@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useRef } from "react";
 import { ref, get } from "firebase/database";
 import { db } from "../firebase";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 // TicketCard Component
-function TicketCard({ ticketBase, dynamicInfo, timeLeft, index }) {
+function TicketCard({ ticketBase, dynamicInfo, timeLeft, index, username }) {
   if (!ticketBase || !dynamicInfo) return null;
 
   const { level, topic1, topic2, image } = ticketBase;
@@ -25,7 +25,7 @@ function TicketCard({ ticketBase, dynamicInfo, timeLeft, index }) {
         </div>
         <div
           className="relative flex flex-col items-center text-white p-6 bg-cover bg-center"
-          style={{ backgroundImage: `url(${image})` }}
+          style={{ backgroundImage: `url(${image || "/default.jpg"})` }}
         >
           <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-black/70 to-transparent z-0" />
           <div className="relative z-10 mt-auto text-center">
@@ -42,12 +42,19 @@ function TicketCard({ ticketBase, dynamicInfo, timeLeft, index }) {
             <div><span>{timeLeft.seconds}</span><div className="text-xs">SEC</div></div>
           </div>
         </div>
+
+        {/* ✅ Buttons */}
         <div className="flex justify-around py-4 mt-10 mr-10 ml-10 text-blue-600 text-sm font-medium">
-          <button onClick={() => navigate("/barcode", { state: { index } })}>View Barcode</button>
-          <button onClick={() => navigate("/ticketdetails", { state: { index } })}>Ticket Details</button>
+          <button onClick={() => navigate("/barcode", { state: { index, username } })}>
+            View Barcode
+          </button>
+          <button onClick={() => navigate("/ticketdetails", { state: { index, username } })}>
+            Ticket Details
+          </button>
         </div>
+
         <div className="text-white text-center py-3 text-sm font-semibold" style={{ backgroundColor: '#1c4ed5' }}>
-          <div className="flex items-center justify-center space-x-0">
+          <div className="flex items-center justify-center space-x-1">
             <img src="/ticket.png" alt="Verified" className="w-4 h-4" />
             <span>ticketmaster.verified</span>
           </div>
@@ -59,6 +66,7 @@ function TicketCard({ ticketBase, dynamicInfo, timeLeft, index }) {
 
 // Main Component
 export default function TicketDisplay() {
+  const { username } = useParams();
   const [ticketBase, setTicketBase] = useState(null);
   const [ticketVariations, setTicketVariations] = useState([]);
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
@@ -70,40 +78,34 @@ export default function TicketDisplay() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const baseSnapshot = await get(ref(db, "ticketinfo"));
-        if (baseSnapshot.exists()) {
-          const baseData = baseSnapshot.val();
-          const { tickets, day, month, year, ...rest } = baseData;
+        const snapshot = await get(ref(db, `ticketinfo/${username}`));
+        if (snapshot.exists()) {
+          const data = snapshot.val();
+          const { tickets, day, month, year, ...rest } = data;
 
           setTicketBase(rest);
-          setTicketVariations(tickets ? Object.values(tickets) : []);
+          setTicketVariations(tickets || []);
 
-          // Parse event date
-          const dayNum = parseInt(day, 10);
-          const monthNum = parseInt(month, 10); // Jan = 1
-          const yearNum = parseInt(year, 10);
+          const dayNum = parseInt(day);
+          const monthNum = parseInt(month);
+          const yearNum = parseInt(year);
 
           if (!isNaN(dayNum) && !isNaN(monthNum) && !isNaN(yearNum)) {
             const eventDate = new Date(Date.UTC(yearNum, monthNum - 1, dayNum, 0, 0, 0));
             if (!isNaN(eventDate.getTime())) {
               setCountdownTarget(eventDate.getTime());
-            } else {
-              console.error("Invalid event date format");
             }
-          } else {
-            console.warn("Missing or invalid day/month/year in Firebase data.");
           }
         } else {
-          setTicketVariations([]);
+          alert("No ticket found for this user.");
         }
       } catch (error) {
         console.error("Error fetching data:", error);
-        setTicketVariations([]);
       }
     };
 
     fetchData();
-  }, []);
+  }, [username]);
 
   useEffect(() => {
     if (!countdownTarget) return;
@@ -159,6 +161,7 @@ export default function TicketDisplay() {
             ticketBase={ticketBase}
             dynamicInfo={ticket}
             timeLeft={timeLeft}
+            username={username} // ✅ Pass username here
           />
         ))}
       </div>

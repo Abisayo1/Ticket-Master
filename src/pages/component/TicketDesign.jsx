@@ -5,7 +5,7 @@ import { db } from "../../firebase";
 
 const TicketDesigns = () => {
   const location = useLocation();
-  const { index: ticketIndex } = location.state || {}; // Use `index` to match navigation from TicketCard
+  const { index: ticketIndex, username } = location.state || {}; // Get both index and username
 
   const [ticketInfo, setTicketInfo] = useState({
     level: "",
@@ -16,8 +16,10 @@ const TicketDesigns = () => {
 
   useEffect(() => {
     const fetchTicketInfo = async () => {
+      if (!username) return;
+
       try {
-        const snapshot = await get(ref(db, "ticketinfo"));
+        const snapshot = await get(ref(db, `ticketinfo/${username}`));
         if (snapshot.exists()) {
           const data = snapshot.val();
           const ticketArray = data.tickets ? Object.values(data.tickets) : [];
@@ -37,7 +39,7 @@ const TicketDesigns = () => {
     };
 
     fetchTicketInfo();
-  }, [ticketIndex]);
+  }, [ticketIndex, username]);
 
   return (
     <div className="flex items-center justify-center p-4">
@@ -65,7 +67,7 @@ const TicketDesigns = () => {
 
         <div className="relative z-10 mt-6 bg-white p-3 rounded-md">
           <img
-            src="/barcodd.jpeg" // Replace this with actual barcode image if needed
+            src="/barcodd.jpeg" // Replace with actual barcode if dynamic
             alt="Barcode"
             className="mx-auto"
           />

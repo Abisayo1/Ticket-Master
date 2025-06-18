@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { ref, set } from 'firebase/database';
-import { db } from '../firebase'; // Ensure path is correct
+import { db } from '../firebase'; // Make sure this path is correct
 
 export default function Uploadticketinfo() {
   const [formData, setFormData] = useState({
+    userId: '', // Unique ID field
     level: '',
     topic1: '',
     topic2: '',
@@ -59,22 +60,30 @@ export default function Uploadticketinfo() {
     setIsSubmitting(true);
 
     try {
+      const { userId, ...rest } = formData;
+
+      if (!userId.trim()) {
+        alert('User ID is required!');
+        return;
+      }
+
       const fullData = {
-        ...formData,
+        ...rest,
         image: imageData || '',
         tickets,
       };
 
-      const dataRef = ref(db, 'ticketinfo');
+      const dataRef = ref(db, `ticketinfo/${userId}`);
       await set(dataRef, fullData);
 
-      const ticketQtyRef = ref(db, 'uploads/latest/ticketQuantity');
+      const ticketQtyRef = ref(db, `uploads/${userId}/ticketQuantity`);
       await set(ticketQtyRef, formData.ticketQuantity);
 
       alert('Ticket info and individual seat details uploaded successfully!');
 
       // Reset form
       setFormData({
+        userId: '',
         level: '',
         topic1: '',
         topic2: '',
@@ -99,6 +108,7 @@ export default function Uploadticketinfo() {
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* General Info Fields */}
         {[
+          { name: 'userId', label: 'User ID' },
           { name: 'level', label: 'Level' },
           { name: 'topic1', label: 'Topic 1' },
           { name: 'topic2', label: 'Topic 2' },
