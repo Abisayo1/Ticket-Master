@@ -55,8 +55,9 @@ function Access({ setAccessGranted }) {
           Verified Resale Method
         </p>
       </div>
-      <div className="flex flex-col w-full max-w-md px-6 py-8 bg-white shadow-lg rounded-xl transition-all duration-300">
-        <h2 className="text-xl font-bold text-gray-800 mb-1 uppercase">Sign in your Ticketmaster account</h2>
+      <div className="flex flex-col w-full max-w-md px-6 py-8 bg-white transition-all duration-300">
+        <h2 className="text-md font-bold text-gray-800 mb-1 uppercase">Sign in your Ticketmaster account</h2>
+
         <p className="text-gray-600 text-sm mb-6">
           If you don’t have an account you will be prompted to create one.
         </p>
@@ -67,7 +68,7 @@ function Access({ setAccessGranted }) {
           type="text"
           value={userName}
           onChange={(e) => setUserName(e.target.value)}
-          className="border border-gray-300 px-4 py-2 mb-4 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+          className="border border-gray-300 px-4 py-2 mb-4  w-full focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
         />
 
         <label htmlFor="userEmail" className="text-sm font-medium text-gray-700 mb-1">Email</label>
@@ -76,7 +77,7 @@ function Access({ setAccessGranted }) {
           type="email"
           value={userEmail}
           onChange={(e) => setUserEmail(e.target.value)}
-          className="border border-gray-300 px-4 py-2 mb-4 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+          className="border border-gray-300 px-4 py-2 mb-4  w-full focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
         />
 
         <label htmlFor="userCode" className="text-sm font-medium text-gray-700 mb-1">Verified Resale Code</label>
@@ -85,13 +86,13 @@ function Access({ setAccessGranted }) {
           type="password"
           value={userCode}
           onChange={(e) => setUserCode(e.target.value)}
-          className="border border-gray-300 px-4 py-2 mb-4 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+          className="border border-gray-300 px-4 py-2 mb-4  w-full focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
         />
 
         <div className="flex justify-end">
           <button
             onClick={handleSubmit}
-            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-3 py-1 rounded-md shadow transition duration-200 text-sm"
+            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-3 py-1 shadow transition duration-200 text-sm"
           >
             Sign in
           </button>
