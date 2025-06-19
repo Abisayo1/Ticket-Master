@@ -120,7 +120,7 @@ export default function UploadForm() {
       <h2 className="text-2xl font-semibold mb-6 text-center">Upload Content</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block mb-1 font-medium">Event Pictures</label>
+          <label className="block mb-1 font-medium">Seat Pictures</label>
           <input
             type="file"
             accept="image/*"
@@ -131,7 +131,7 @@ export default function UploadForm() {
         </div>
 
         <div>
-          <label className="block mb-1 font-medium">Seat Pictures</label>
+          <label className="block mb-1 font-medium">Event Pictures</label>
           <input
             type="file"
             accept="image/*"
