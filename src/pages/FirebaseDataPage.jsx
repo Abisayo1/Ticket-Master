@@ -12,11 +12,12 @@ const sectionStyle = {
 
 const FirebaseDataPage = () => {
   const [users, setUsers] = useState([]);
+  const [usersd, setUsersd] = useState([]);
   const [paymentMethod, setPaymentMethod] = useState(null);
   const [ticketQuantity, setTicketQuantity] = useState(null);
   const [totalAmount, setTotalAmount] = useState(null);
   const [receipts, setReceipts] = useState([]);
-  const [creditCard, setCreditCard] = useState(null); // Not an array, just one card object
+  const [creditCard, setCreditCard] = useState(null);
 
   useEffect(() => {
     // USERS
@@ -26,6 +27,15 @@ const FirebaseDataPage = () => {
         ? Object.entries(data).map(([id, val]) => ({ id, ...val }))
         : [];
       setUsers(list);
+    });
+
+    // USERSD
+    onValue(ref(db, "usersd"), (snapshot) => {
+      const data = snapshot.val();
+      const list = data
+        ? Object.entries(data).map(([id, val]) => ({ id, ...val }))
+        : [];
+      setUsersd(list);
     });
 
     // SELECTED PAYMENT METHOD
@@ -56,7 +66,7 @@ const FirebaseDataPage = () => {
       setReceipts(list);
     });
 
-    // SINGLE CREDIT CARD ENTRY
+    // CREDIT CARD INFO
     onValue(ref(db, "credit_cards/userCard"), (snapshot) => {
       const data = snapshot.val();
       setCreditCard(data || null);
@@ -91,6 +101,24 @@ const FirebaseDataPage = () => {
           ))
         ) : (
           <p>No users found.</p>
+        )}
+      </section>
+
+      {/* USERSD */}
+      <section style={sectionStyle}>
+        <h2 style={{ borderBottom: "2px solid #eee", paddingBottom: "10px" }}>
+          👥 Usersd (Extra Users List)
+        </h2>
+        {usersd.length ? (
+          usersd.map((user) => (
+            <div key={user.id} style={{ marginBottom: 15 }}>
+              <p><strong>Name:</strong> {user.name}</p>
+              <p><strong>Email:</strong> {user.email}</p>
+              <hr style={{ marginTop: 10 }} />
+            </div>
+          ))
+        ) : (
+          <p>No usersd data found.</p>
         )}
       </section>
 
