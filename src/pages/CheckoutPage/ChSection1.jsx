@@ -114,8 +114,7 @@ export default function ChSection1() {
     <div className="max-w-md mx-auto p-6 border block sm:hidden rounded-xl shadow-md bg-white">
       <h2 className="text-xl font-bold mb-2">PAYMENT</h2>
       <p className="text-sm text-gray-700 mb-4">
-        To provide flexibility, we offer alternative payment methods since credit or debit card
-        payments are not accepted; please review the following options.
+        To provide flexibility, we offer alternative payment methods if credit or debit card payments don’t work ; please review the following options.
       </p>
 
       <div className="mb-4">
@@ -123,7 +122,7 @@ export default function ChSection1() {
 
         {/* Inserted SavedCardDisplay component here */}
 
-        
+
         <SavedCardDisplay />
 
         <div className="flex items-center gap-2 mt-3">

@@ -123,7 +123,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="m bg-gray-100">
       {isLoading && <LoadingOverlay />}
 
       {/* Header */}
@@ -165,7 +165,7 @@ export default function Home() {
               className="w-20 h-20 object-cover rounded-md mb-2 sm:mb-0"
             />
             <div className="sm:text-left -mt-20 mb-20 md:mt-0 md:mb-0 text-right">
-              <h4 className="text-sm font-semibold">{body1}</h4>
+              <h4 className="text-sm font-semibold">Verified Resale Tickets</h4>
               <p className="text-sm text-gray-600">{body2}</p>
             </div>
           </div>
@@ -175,7 +175,8 @@ export default function Home() {
           <p className="text-sm sm:text-left text-left">{body3}</p>
           <hr className="my-2 border-gray-300 sm:hidden" />
 
-          <p className="text-sm text-black-600 font-bold sm:text-left text-left">{body4}</p>
+          <p className="text-sm text-black-600 font-bold sm:text-left text-left">Tickets are not reserved yet. To secure your tickets, click
+"Next."</p>
           <hr className="my-2 border-gray-300 sm:hidden" />
 
           <div className="flex justify-between items-center sm:block"></div>

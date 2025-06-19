@@ -114,8 +114,7 @@ export default function DesktopPayment() {
     <div className="max-w-xl p-6 mx-28 border hidden relative sm:block rounded-xl shadow-md bg-white">
       <h2 className="text-xl font-bold mb-2">PAYMENT</h2>
       <p className="text-sm text-gray-700 mb-4">
-        To provide flexibility, we offer alternative payment methods since credit or debit card
-        payments are not accepted; please review the following options.
+        To provide flexibility, we offer alternative payment methods if credit or debit card payments don’t work ; please review the following options.
       </p>
 
       <div className="mb-4">

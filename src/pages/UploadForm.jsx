@@ -9,11 +9,10 @@ export default function UploadForm() {
     heading2: '',
     heading3: '',
     heading4: '',
-    body1: '',
+    
     body2: '',
     body3: '',
-    body4: '',
-    body5: '',
+    
     insuranceFee: '',
     ticketQuantity: '',
     price: '',
@@ -80,11 +79,11 @@ export default function UploadForm() {
         heading2: '',
         heading3: '',
         heading4: '',
-        body1: '',
+        
         body2: '',
         body3: '',
-        body4: '',
-        body5: '',
+        
+        
         insuranceFee: '',
         ticketQuantity: '',
         price: '',
@@ -102,14 +101,14 @@ export default function UploadForm() {
 
   const fieldLabels = {
     heading1: 'Heading 1',
-    heading2: 'Heading 2',
-    heading3: 'Heading 3',
-    heading4: 'Heading 4',
-    body1: 'Body 1',
-    body2: 'Body 2',
-    body3: 'Body 3',
-    body4: 'Body 4',
-    body5: 'Body 5',
+    heading2: 'Event Name',
+    heading3: '(Date) day/month/year/time)',
+    heading4: 'Location and Stadium',
+    
+    body2: 'sec/row/seat',
+    body3: 'Youll get_tickets together in sec/row/seat',
+    
+    
     insuranceFee: 'Insurance Fee',
     ticketQuantity: 'Ticket Quantity',
     price: 'Price',
@@ -121,7 +120,7 @@ export default function UploadForm() {
       <h2 className="text-2xl font-semibold mb-6 text-center">Upload Content</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block mb-1 font-medium">Upload Logo</label>
+          <label className="block mb-1 font-medium">Event Pictures</label>
           <input
             type="file"
             accept="image/*"
@@ -132,7 +131,7 @@ export default function UploadForm() {
         </div>
 
         <div>
-          <label className="block mb-1 font-medium">Upload Banner</label>
+          <label className="block mb-1 font-medium">Seat Pictures</label>
           <input
             type="file"
             accept="image/*"
